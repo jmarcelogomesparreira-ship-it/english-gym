@@ -225,29 +225,87 @@ h3.sh{font-family:var(--display);font-weight:600;font-size:1.12rem;margin:0 0 10
 .miss{color:var(--bad);text-decoration:underline wavy;text-decoration-thickness:1px;text-underline-offset:4px}
 .q-main.sm{font-size:clamp(1.25rem,5vw,1.6rem)}
 .btn.mic.on{background:var(--bad);color:#fff}
+
+/* ===== v3: layout de app no celular ===== */
+.appbar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px);margin-top:calc(-1 * env(safe-area-inset-top,0px))}
+.ab{display:flex;align-items:center;gap:10px;height:56px}
+.brand{display:flex;flex-direction:column;gap:5px}
+.brand b{font-family:var(--display);font-weight:800;font-size:1.25rem;letter-spacing:-.02em;line-height:1}
+.brand .lanes{margin:0;height:4px;width:64px;order:2}
+.pills{margin-left:auto;display:flex;gap:6px}
+.pill{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-weight:700;font-size:.9rem;white-space:nowrap}
+.pill.hot{border-color:color-mix(in srgb,var(--fut) 45%,var(--line));background:var(--fut-soft)}
+main{padding:16px 0 calc(96px + env(safe-area-inset-bottom,0px))}
+h2{font-size:1.6rem;margin:2px 0 4px;letter-spacing:-.01em}
+.bottomnav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);max-width:760px;margin:0 auto;background:color-mix(in srgb,var(--surface) 92%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+@media (min-width:761px){.bottomnav{bottom:12px;border:1px solid var(--line);border-radius:20px;padding-bottom:6px;box-shadow:0 6px 24px rgba(0,0,0,.08)}}
+.nb{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0 4px;border-radius:14px;color:var(--muted);font-size:.74rem;font-weight:700;-webkit-tap-highlight-color:transparent}
+.nb svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.nb[aria-current="page"]{color:var(--ink)}
+.nb[aria-current="page"] svg{stroke-width:2.3}
+.nb[aria-current="page"]::before{content:"";width:28px;height:3px;border-radius:2px;background:var(--pres);margin:-6px 0 3px}
+.nb:not([aria-current="page"])::before{content:"";height:3px;margin:-6px 0 3px}
+/* linhas de chips deslizam pro lado em vez de quebrar */
+.controls:not(:has(input)){flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-left:-16px;margin-right:-16px;padding:2px 16px;scroll-padding:16px}
+.controls:not(:has(input))::-webkit-scrollbar{display:none}
+.controls:not(:has(input)) > *{flex:none}
+.chip{padding:9px 15px;font-weight:700;font-size:.93rem}
+/* botões grandes pro polegar */
+@media (max-width:560px){
+  .btns{gap:10px}
+  .btns .btn{flex:1 1 0;min-height:52px;font-size:1.02rem}
+  .card,.fc,.reader{border-radius:20px}
+  .fc{min-height:52vh}
+  .fc-front{font-size:clamp(1.7rem,8vw,2.3rem)}
+  .opt{min-height:56px;font-size:1.08rem}
+  .answer{font-size:1.15rem;min-height:54px}
+}
+.btn{border-radius:14px}
+/* hoje */
+.hero2{background:var(--hero,#18202E);color:var(--hero-ink,#fff);border-radius:22px;padding:20px 20px 18px;position:relative;overflow:hidden}
+.hero2 .row{display:flex;align-items:flex-end;gap:12px}
+.hero2 .big{font-family:var(--display);font-weight:800;font-size:clamp(3.4rem,17vw,4.8rem);line-height:.85;letter-spacing:-.04em}
+.hero2 .lbl{font-weight:700;font-size:1.05rem;line-height:1.2;padding-bottom:4px}
+.hero2 .msg{opacity:.75;margin:10px 0 14px;font-size:.95rem}
+.hero2 .goalbar{background:rgba(255,255,255,.18);height:12px;margin:0 0 8px}
+.hero2 .goalbar i{background:var(--pres)}
+.hero2 .goalbar.full i{background:var(--ok)}
+.hero2 .meta{display:flex;justify-content:space-between;gap:8px;font-size:.92rem;opacity:.9}
+.hero2 .lanes{position:absolute;top:20px;right:20px;margin:0;width:58px}
+.quick{grid-template-columns:1fr 1fr}
+.qa{display:flex;flex-direction:column;justify-content:space-between;min-height:96px;border-left:1px solid var(--line)!important;position:relative;padding:14px 14px 12px}
+.qa::before{content:"";width:28px;height:4px;border-radius:2px;margin-bottom:12px;background:var(--ink)}
+.qa.t0::before{background:var(--past)} .qa.t1::before{background:var(--pres)} .qa.t2::before{background:var(--fut)} .qa.t4::before{background:var(--bad)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hero:#272B63;--hero-ink:#EEF0FF}}
+:root[data-theme="dark"]{--hero:#272B63;--hero-ink:#EEF0FF}
+@media (max-width:560px){.fc{min-height:38vh}}
+.dirbtn{margin-left:auto;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 10px;font-weight:700;font-size:.82rem;color:var(--ink)}
+.deckinfo{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+/* mais */
+.menu{display:flex;flex-direction:column;gap:8px}
+.mrow{display:flex;align-items:center;gap:14px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:14px 16px;width:100%}
+.mrow .ic{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.25rem;background:var(--bg)}
+.mrow b{display:block;font-size:1.05rem}
+.mrow span.d{color:var(--muted);font-size:.9rem}
+.mrow .go{margin-left:auto;color:var(--muted);font-size:1.3rem}
+.backtomore{border:0;background:none;color:var(--muted);font-weight:700;padding:0;margin:0 0 6px;font-size:.92rem}
 </style>
 </head>
 <body>
-<header class="wrap top">
-  <h1>English Gym</h1>
-  <div class="lanes" aria-hidden="true"><span></span><span></span><span></span></div>
-  <p class="sub">Inglês todo dia: frases, palavras, verbos, flashcards, ditado e pronúncia.</p>
-  <div class="stats" id="stats"></div>
-</header>
-<nav class="tabs" aria-label="Seções">
-  <div class="wrap" role="tablist">
-    <button class="tab" role="tab" data-tab="home">Hoje</button>
-    <button class="tab" role="tab" data-tab="cards">Flashcards</button>
-    <button class="tab" role="tab" data-tab="train">Treino</button>
-    <button class="tab" role="tab" data-tab="errors">Erros comuns</button>
-    <button class="tab" role="tab" data-tab="phrases">Frases</button>
-    <button class="tab" role="tab" data-tab="words">Palavras</button>
-    <button class="tab" role="tab" data-tab="verbs">Verbos</button>
-    <button class="tab" role="tab" data-tab="texts">Textos</button>
-    <button class="tab" role="tab" data-tab="rules">Regras</button>
+<header class="appbar">
+  <div class="wrap ab">
+    <div class="brand"><div class="lanes" aria-hidden="true"><span></span><span></span><span></span></div><b>English Gym</b></div>
+    <div class="pills" id="stats"></div>
   </div>
-</nav>
+</header>
 <main class="wrap" id="view"></main>
+<nav class="bottomnav" aria-label="Seções">
+  <button class="nb" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5V20h-5.5v-5.5h-5V20H4z"/></svg><span>Hoje</span></button>
+  <button class="nb" data-tab="cards"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="7.5" width="12.5" height="13" rx="2"/><path d="M8 4h10.5a2 2 0 0 1 2 2v11"/></svg><span>Cards</span></button>
+  <button class="nb" data-tab="train"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 7v10M3.5 9.5v5M17.5 7v10M20.5 9.5v5M6.5 12h11"/></svg><span>Treino</span></button>
+  <button class="nb" data-tab="errors"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5.5M12 16.3v.2"/></svg><span>Erros</span></button>
+  <button class="nb" data-tab="more"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span>Mais</span></button>
+</nav>
 
 <script>
 /* ---------- DATA ---------- */
@@ -910,17 +968,17 @@ const state={tab:"home",q:"",filter:"all",hide:false,open:null,mode:"past",cur:n
 /* ---------- RENDER ---------- */
 const view=document.getElementById("view");
 function renderStats(){
-  const m=VERBS.filter(v=>isMastered(v.b)).length;
+  const s=streak();
   document.getElementById("stats").innerHTML=
-    `<div class="stat"><b>🔥 ${streak()}</b><span>dias seguidos</span></div>
-     <div class="stat"><b>${fmtMin(dayLog().sec)}</b><span>hoje</span></div>
-     <div class="stat"><b>${m}/${VERBS.length}</b><span>verbos</span></div>
-     <button class="speed" data-act="speed">${store.rate<1?"🐢 Voz devagar":"🔊 Voz normal"}</button>`;
+    `<span class="pill ${dayDone(today())?"hot":""}" title="Dias seguidos">🔥 ${s}</span><span class="pill" title="Estudado hoje">⏱ ${fmtMin(dayLog().sec)}</span>`;
 }
+const SECONDARY=["phrases","words","verbs","texts","rules"];
 function render(){
-  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.tab===state.tab));
+  const navTab=SECONDARY.includes(state.tab)?"more":state.tab;
+  document.querySelectorAll(".nb").forEach(t=>{ if(t.dataset.tab===navTab) t.setAttribute("aria-current","page"); else t.removeAttribute("aria-current"); });
   renderStats();
-  ({home:renderHome,cards:renderCards,train:renderTrain,errors:renderErrors,phrases:renderPhrases,words:renderWords,verbs:renderVerbs,texts:renderTexts,rules:renderRules})[state.tab]();
+  ({more:renderMore,home:renderHome,cards:renderCards,train:renderTrain,errors:renderErrors,phrases:renderPhrases,words:renderWords,verbs:renderVerbs,texts:renderTexts,rules:renderRules})[state.tab]();
+  if(SECONDARY.includes(state.tab)) view.insertAdjacentHTML("afterbegin",`<button class="backtomore" data-tab="more">‹ Mais</button>`);
 }
 
 function renderVerbs(){
@@ -1188,35 +1246,52 @@ function renderHome(){
   let total=0,trained=0; for(const d in store.log){ total+=store.log[d].sec||0; if(dayDone(d)) trained++; }
   const due=dueCount(), m=VERBS.filter(v=>isMastered(v.b)).length;
   view.innerHTML=`
-  <div class="hero"><div class="flame">🔥 ${s}</div><div><div class="lbl">${s===1?"dia seguido":"dias seguidos"}</div>
-    <p class="msg">${doneToday?"Hoje já contou. Volta amanhã pra manter.":s?"Treine hoje pra não perder a sequência.":"Faça qualquer atividade hoje pra começar a sequência."}</p></div></div>
-  <div class="section"><h3 class="sh">Meta de hoje</h3>
+  <div class="hero2">
+    <div class="lanes" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="row"><div class="big">${s}</div><div class="lbl">🔥<br>${s===1?"dia seguido":"dias seguidos"}</div></div>
+    <p class="msg">${doneToday?"Hoje já contou. Volta amanhã pra manter.":s?"Treine hoje pra não perder a sequência.":"Faça qualquer atividade pra começar a sequência."}</p>
     <div class="goalbar ${pct>=1?"full":""}"><i style="width:${(pct*100).toFixed(1)}%"></i></div>
-    <p class="small" style="margin:0 0 10px">${fmtMin(L.sec)} de ${goal} min${pct>=1?" · meta batida ✓":""}</p>
-    <div class="controls" style="margin:0">${[5,10,15,20,30].map(g=>`<button class="chip" aria-pressed="${goal===g}" data-goal="${g}">${g} min</button>`).join("")}</div>
+    <div class="meta"><span>${fmtMin(L.sec)} de ${goal} min hoje</span><span>${pct>=1?"Meta batida ✓":Math.round(pct*100)+"%"}</span></div>
   </div>
+  <div class="section"><h3 class="sh">Treinar agora</h3><div class="quick">
+    <button class="qa t1" data-goto="cards">Flashcards<span>${due?due+" pra revisar":"Cards novos esperando"}</span></button>
+    <button class="qa t0" data-goto="train:past">Verbos<span>${m} de ${VERBS.length} dominados</span></button>
+    <button class="qa t4" data-goto="train:fix">Erros comuns<span>Carro branco = white car</span></button>
+    <button class="qa t2" data-goto="train:dict">Ditado<span>Ouça e escreva</span></button>
+    <button class="qa t3" data-goto="train:speak">Pronúncia<span>Fale e o app confere</span></button>
+    <button class="qa t1" data-goto="phrases">Frases do dia<span>Ouça e repita</span></button>
+  </div></div>
   <div class="section"><h3 class="sh">Hoje</h3><div class="nums">
-    ${num(fmtMin(L.sec),"estudados")}${num(L.a||0,"atividades")}${num(L.ok||0,"acertos")}${num(L.cards||0,"cards revisados")}
+    ${num(L.a||0,"atividades")}${num(L.ok||0,"acertos")}${num(L.cards||0,"cards")}
   </div></div>
   <div class="section"><h3 class="sh">Últimos 7 dias</h3>
     <div class="week">${days.map((d,k)=>{ const sc=secs[k]; const h=sc?Math.max(6,sc/mx*100):3;
       const cls=sc>=goal*60?"met":sc>0?"some":""; const wd=WD[new Date(d+"T12:00:00").getDay()];
       return `<div class="wk ${k===6?"today":""}"><em>${sc>=60?Math.floor(sc/60):""}</em><div class="barbox"><i class="${cls}" style="height:${h}%"></i></div><small>${wd}</small></div>`; }).join("")}</div>
-    <p class="small">Número em cima = minutos. Verde = meta batida.</p></div>
-  <div class="section"><h3 class="sh">Treinar agora</h3><div class="quick">
-    <button class="qa t1" data-goto="cards">Flashcards<span>${due?due+" pra revisar hoje":"Cards novos esperando"}</span></button>
-    <button class="qa t0" data-goto="train:past">Verbos<span>${m} de ${VERBS.length} dominados</span></button>
-    <button class="qa t2" data-goto="train:dict">Ditado<span>Ouça e escreva</span></button>
-    <button class="qa t3" data-goto="train:speak">Pronúncia<span>Fale e o app confere</span></button>
-    <button class="qa t0" data-goto="train:fix">Erros comuns<span>Carro branco = white car</span></button>
-  </div></div>
+    <p class="small">Minutos por dia. Verde = meta batida.</p></div>
   <div class="section"><h3 class="sh">Desde o começo</h3><div class="nums">
     ${num(fmtMin(total),"no total")}${num(trained,"dias treinados")}${num(bestStreak(),"melhor sequência")}${num(learnedCount(),"cards aprendidos")}
-  </div></div>
-  <div class="section"><h3 class="sh">Backup</h3>
-    <p class="small" style="margin:0 0 10px">O progresso fica salvo neste celular, neste navegador. Salve um backup antes de trocar de aparelho ou limpar o navegador.</p>
-    <div class="backup"><button class="btn ghost" data-act="export">Salvar backup</button><button class="btn ghost" data-act="import">Restaurar backup</button>
-    <input type="file" id="importFile" accept="application/json,.json" hidden></div></div>`;
+  </div></div>`;
+}
+function renderMore(){
+  const row=(tab,ic,t,d,act)=>`<button class="mrow" ${act?`data-act="${act}"`:`data-tab="${tab}"`}><span class="ic">${ic}</span><span><b>${t}</b><span class="d">${d}</span></span><span class="go">${act?"":"›"}</span></button>`;
+  view.innerHTML=`<h2>Mais</h2>
+    <div class="menu">
+      ${row("phrases","💬","Frases do dia a dia",PHRASES.length+" frases pra contar seu dia")}
+      ${row("words","🔤","Palavras",WORDS.length+" palavras por categoria")}
+      ${row("verbs","📚","Verbos",VERBS.length+" verbos nos 3 tempos")}
+      ${row("texts","📖","Textos","Pra ler em voz alta")}
+      ${row("rules","📏","Regras","As regras que mais caem")}
+    </div>
+    <div class="section"><h3 class="sh">Ajustes</h3><div class="menu">
+      ${row("","🗣️","Velocidade da voz",store.rate<1?"Devagar · toque pra voz normal":"Normal · toque pra voz devagar","speed")}
+    </div>
+    <p class="small" style="margin:14px 0 6px">Meta diária</p>
+    <div class="controls" style="margin:0">${[5,10,15,20,30].map(g=>`<button class="chip" aria-pressed="${store.goal===g}" data-goal="${g}">${g} min</button>`).join("")}</div></div>
+    <div class="section"><h3 class="sh">Backup</h3>
+      <p class="small" style="margin:0 0 10px">O progresso fica salvo neste celular. Salve um backup antes de trocar de aparelho ou limpar o navegador.</p>
+      <div class="btns"><button class="btn ghost" data-act="export">Salvar backup</button><button class="btn ghost" data-act="import">Restaurar</button></div>
+      <input type="file" id="importFile" accept="application/json,.json" hidden></div>`;
 }
 function exportData(){
   const blob=new Blob([JSON.stringify(store)],{type:"application/json"});
@@ -1294,12 +1369,11 @@ function renderCards(){
         :`<button class="btn" data-act="flip">Virar</button>`}</div>`;
   }
   view.innerHTML=`<h2>Flashcards</h2>
-    <p class="hint">Tente lembrar antes de virar. O que você erra volta logo; o que acerta volta em alguns dias.</p>
+    <p class="hint">Lembre antes de virar. Errou, volta logo; acertou, volta em alguns dias.</p>
     <div class="controls">${DECKS.map(([k,n])=>`<button class="chip" aria-pressed="${f.deck===k}" data-deck="${k}">${n}</button>`).join("")}
-      <span style="flex:1"></span>
-      <button class="chip" aria-pressed="${f.dir==="pt"}" data-dir="pt">PT → EN</button><button class="chip" aria-pressed="${f.dir==="en"}" data-dir="en">EN → PT</button></div>
+</div>
     <div class="controls"><button class="chip" aria-pressed="${f.cat==="all"}" data-fccat="all">Todas</button>${cats.map(c=>`<button class="chip" aria-pressed="${f.cat===c}" data-fccat="${esc(c)}">${esc(c)}</button>`).join("")}</div>
-    <p class="deckinfo">${nDue} pra revisar · ${nNew} novos · ${nLearn} aprendidos de ${items.length}</p>
+    <div class="deckinfo"><span>${nDue} pra revisar · ${nNew} novos · ${nLearn} aprendidos</span><button class="dirbtn" data-dir="${f.dir==="pt"?"en":"pt"}" aria-label="Trocar direção">${f.dir==="pt"?"PT → EN":"EN → PT"} ⇄</button></div>
     ${body}`;
 }
 
@@ -1416,7 +1490,7 @@ document.addEventListener("click",e=>{
   if(d.opt!==undefined){ const c=state.cur; if(c.done) return; c.chosen=+d.opt; grade(c.chosen===c.i); render(); return; }
   const c=state.cur, f=state.fc;
   switch(d.act){
-    case "speed": store.rate=store.rate<1?1:0.75; save(); renderStats(); break;
+    case "speed": store.rate=store.rate<1?1:0.75; save(); render(); break;
     case "hide": state.hide=!state.hide; render(); break;
     case "stop": stopSeq(); if(synth) synth.cancel(); break;
     case "pt": state.showPT=!state.showPT; render(); break;
