@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>English Gym</title>
+<meta name="theme-color" content="#18202E">
+<meta name="description" content="Treino diário de inglês: frases, palavras, verbos, flashcards, ditado e pronúncia.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="English Gym">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F4F8; --surface:#FFFFFF; --ink:#18202E; --muted:#5B6577; --line:#DDE2EA;
+  --past:#5146D9; --pres:#0B8F7E; --fut:#B86F00; --ok:#1E8E3E; --bad:#C62D2D;
+  --past-soft:#ECEBFF; --pres-soft:#E3F6F3; --fut-soft:#FFF3DE;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F131B; --surface:#182030; --ink:#E8ECF4; --muted:#98A2B5; --line:#2A3447;
+    --past:#9C95FF; --pres:#3CC9B4; --fut:#F2B13D; --ok:#4CC46E; --bad:#F06A6A;
+    --past-soft:#24234A; --pres-soft:#123631; --fut-soft:#3A2C10;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F131B; --surface:#182030; --ink:#E8ECF4; --muted:#98A2B5; --line:#2A3447;
+  --past:#9C95FF; --pres:#3CC9B4; --fut:#F2B13D; --ok:#4CC46E; --bad:#F06A6A;
+  --past-soft:#24234A; --pres-soft:#123631; --fut-soft:#3A2C10;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--pres);outline-offset:2px;border-radius:6px}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+
+/* header */
+.top{padding:22px 0 10px}
+.top h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,7vw,2.8rem);line-height:1;margin:0;letter-spacing:-.02em}
+.lanes{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:12px 0 10px;max-width:220px}
+.lanes span{flex:1}
+.lanes span:nth-child(1){background:var(--past)}
+.lanes span:nth-child(2){background:var(--pres)}
+.lanes span:nth-child(3){background:var(--fut)}
+.sub{color:var(--muted);margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;align-items:center}
+.stat b{font-family:var(--display);font-size:1.3rem}
+.stat span{color:var(--muted);font-size:.9rem;margin-left:4px}
+.speed{margin-left:auto;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:.92rem}
+
+/* tabs */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:4px;overflow-x:auto}
+.tab{border:0;background:none;padding:14px 12px 12px;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+
+main{padding:18px 0 60px}
+h2{font-family:var(--display);font-weight:600;font-size:1.45rem;margin:4px 0 6px}
+.hint{color:var(--muted);margin:0 0 14px;font-size:.95rem}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
+.search{flex:1 1 220px;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:.95rem}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.t0[aria-pressed="true"]{background:var(--past);border-color:var(--past);color:#fff}
+.chip.t1[aria-pressed="true"]{background:var(--pres);border-color:var(--pres);color:#fff}
+.chip.t2[aria-pressed="true"]{background:var(--fut);border-color:var(--fut);color:#fff}
+
+/* verb list */
+.vhead,.vrow{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.25fr;gap:8px;align-items:center}
+.vhead{font-size:.85rem;font-weight:700;padding:0 14px 6px}
+.vhead .c0{color:var(--muted)}
+.c1{color:var(--pres)} .c2{color:var(--past)} .c3{color:var(--fut)}
+.vlist{display:flex;flex-direction:column;gap:6px}
+.verb{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.vrow{width:100%;border:0;background:none;text-align:left;padding:12px 14px}
+.vrow .pt{color:var(--muted);font-size:.92rem}
+.vrow .f{font-weight:700}
+.vrow .f.c1{color:var(--pres)} .vrow .f.c2{color:var(--past)} .vrow .f.c3{color:var(--fut)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:2px;background:var(--past-soft);color:var(--past)}
+.hidden-past{display:inline-block;min-width:3.5em;border-bottom:2px dashed var(--past);color:transparent;user-select:none}
+.mastered{color:var(--ok);font-size:.8rem;margin-left:4px}
+.detail{padding:4px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.sent{display:flex;gap:10px;align-items:flex-start;border-left:4px solid;padding:6px 0 6px 12px;border-radius:2px}
+.sent.t0{border-color:var(--past)} .sent.t1{border-color:var(--pres)} .sent.t2{border-color:var(--fut)}
+.sent .en{font-size:1.05rem}
+.sent .ptx{color:var(--muted);font-size:.92rem}
+.sent b.t0{color:var(--past)} .sent b.t1{color:var(--pres)} .sent b.t2{color:var(--fut)}
+.tw{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.note{font-size:.9rem;background:var(--fut-soft);padding:8px 12px;border-radius:10px}
+.say{flex:none;border:1px solid var(--line);background:var(--bg);border-radius:10px;width:38px;height:38px;font-size:1rem;display:inline-grid;place-items:center}
+.nosay .say,.nosay .speed,.nosay .listenbar{display:none}
+.empty{padding:20px;text-align:center;color:var(--muted)}
+
+/* training */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+.q-label{color:var(--muted);font-size:.95rem;margin:0 0 6px}
+.q-main{font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,6vw,2rem);line-height:1.2;margin:0 0 4px}
+.q-pt{font-size:1.25rem;margin:0 0 14px}
+.answer{width:100%;padding:13px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);font-size:1.15rem;margin:10px 0}
+.answer.ok{border-color:var(--ok)} .answer.bad{border-color:var(--bad)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;background:var(--ink);color:var(--bg)}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.btn.okb{background:var(--ok);color:#fff} .btn.badb{background:var(--bad);color:#fff}
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--bg);border-radius:12px;padding:12px 14px;font-size:1.05rem}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--bg))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--bg))}
+.fb{margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--bg)}
+.fb.ok{border-left:4px solid var(--ok)} .fb.bad{border-left:4px solid var(--bad)}
+.fb p{margin:4px 0}
+.progress{margin-top:16px;color:var(--muted);font-size:.92rem}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--ok)}
+
+/* texts */
+.reader{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;border-top:6px solid var(--pres)}
+.reader.t0{border-top-color:var(--past)} .reader.t2{border-top-color:var(--fut)}
+.reader h3{font-family:var(--display);font-weight:600;font-size:1.35rem;margin:0 0 12px}
+.ttext{font-size:1.25rem;line-height:1.75;margin:0;max-width:62ch}
+.w{cursor:pointer;border-radius:4px}
+.w:hover{background:var(--bg)}
+.vb{font-weight:700;padding:0 2px;border-radius:4px}
+.t0 .vb{color:var(--past);background:var(--past-soft)}
+.t1 .vb{color:var(--pres);background:var(--pres-soft)}
+.t2 .vb{color:var(--fut);background:var(--fut-soft)}
+.w.speaking{outline:2px solid currentColor}
+.trans{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted);font-size:1.02rem;max-width:62ch}
+.listenbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+
+/* rules */
+.rules{display:flex;flex-direction:column;gap:12px}
+.rule{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.rule h3{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:0 0 6px}
+.rule p{margin:0 0 10px}
+.ex{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:1.02rem}
+.ex .mk{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;font-size:.85rem}
+.ex.no .mk{background:var(--bad)} .ex.yes .mk{background:var(--ok)}
+.ex.no span.t{text-decoration:line-through;text-decoration-color:var(--bad);color:var(--muted)}
+.ex .say{width:32px;height:32px;margin-left:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:.98rem;margin-top:4px}
+.tbl th,.tbl td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+.tbl th{font-size:.85rem}
+.scroll{overflow-x:auto}
+
+@media (max-width:560px){
+  .vhead{display:none}
+  .vrow{grid-template-columns:1fr 1fr 1.3fr;row-gap:2px}
+  .vrow .pt{grid-column:1/-1}
+  body{font-size:16px}
+  .card,.reader{padding:18px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* hoje */
+.hero{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.flame{font-family:var(--display);font-weight:800;font-size:clamp(3rem,13vw,4.4rem);line-height:.95;letter-spacing:-.03em}
+.hero .lbl{font-weight:700;font-size:1.1rem}
+.hero .msg{color:var(--muted);margin:2px 0 0}
+.section{margin-top:24px}
+h3.sh{font-family:var(--display);font-weight:600;font-size:1.12rem;margin:0 0 10px}
+.goalbar{height:14px;background:var(--line);border-radius:7px;overflow:hidden;margin:4px 0 8px}
+.goalbar i{display:block;height:100%;background:var(--pres);transition:width .3s}
+.goalbar.full i{background:var(--ok)}
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.num{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.num b{display:block;font-family:var(--display);font-size:1.45rem;line-height:1.15}
+.num span{color:var(--muted);font-size:.88rem}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;height:140px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px 8px}
+.wk{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%;min-height:0}
+.wk .barbox{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center;min-height:0}
+.wk i{display:block;width:100%;max-width:34px;border-radius:6px 6px 2px 2px;background:var(--line)}
+.wk i.some{background:var(--pres)} .wk i.met{background:var(--ok)}
+.wk small{font-size:.78rem;color:var(--muted)} .wk.today small{color:var(--ink);font-weight:700}
+.wk em{font-style:normal;font-size:.72rem;color:var(--muted);min-height:1em}
+.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.qa{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:14px;font-weight:700;font-size:1.02rem}
+.qa span{display:block;font-weight:400;color:var(--muted);font-size:.88rem;margin-top:2px}
+.qa.t0{border-left:5px solid var(--past)} .qa.t1{border-left:5px solid var(--pres)} .qa.t2{border-left:5px solid var(--fut)} .qa.t3{border-left:5px solid var(--ink)}
+.small{font-size:.88rem;color:var(--muted)}
+.backup{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* flashcards */
+.fc{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;min-height:250px;display:flex;flex-direction:column;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.fc-front{font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,6vw,2.1rem);line-height:1.2;margin:6px 0 12px}
+.fc-back{border-top:1px dashed var(--line);padding-top:14px;margin-top:auto;animation:rise .18s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fc-en{font-size:1.3rem;font-weight:700;margin:0 0 6px;display:flex;align-items:center;gap:10px;justify-content:space-between}
+.forms{display:flex;flex-wrap:wrap;gap:6px 18px;margin:4px 0 8px;font-weight:700;font-size:1.1rem}
+.forms small{display:block;font-weight:400;font-size:.75rem;color:var(--muted)}
+.deckinfo{color:var(--muted);font-size:.92rem;margin:-2px 0 12px}
+
+/* frases e palavras */
+.phr-list{display:flex;flex-direction:column;gap:6px}
+.phr{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.phr .en{font-size:1.05rem;font-weight:700}
+.phr .ptx{color:var(--muted);font-size:.92rem}
+.phr.speaking{border-color:var(--pres);box-shadow:inset 4px 0 0 var(--pres)}
+.cat-h{font-family:var(--display);font-weight:600;font-size:1.05rem;margin:20px 0 8px;color:var(--muted)}
+.cat-h:first-child{margin-top:4px}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px}
+.wd{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px}
+.wd b{display:block;font-size:1.05rem}
+.wd span{color:var(--muted);font-size:.9rem}
+.wd .masked{display:inline-block;width:5em;border-bottom:2px dashed var(--line)}
+
+/* ditado e pronúncia */
+.miss{color:var(--bad);text-decoration:underline wavy;text-decoration-thickness:1px;text-underline-offset:4px}
+.q-main.sm{font-size:clamp(1.25rem,5vw,1.6rem)}
+.btn.mic.on{background:var(--bad);color:#fff}
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <h1>English Gym</h1>
+  <div class="lanes" aria-hidden="true"><span></span><span></span><span></span></div>
+  <p class="sub">Inglês todo dia: frases, palavras, verbos, flashcards, ditado e pronúncia.</p>
+  <div class="stats" id="stats"></div>
+</header>
+<nav class="tabs" aria-label="Seções">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" data-tab="home">Hoje</button>
+    <button class="tab" role="tab" data-tab="cards">Flashcards</button>
+    <button class="tab" role="tab" data-tab="train">Treino</button>
+    <button class="tab" role="tab" data-tab="errors">Erros comuns</button>
+    <button class="tab" role="tab" data-tab="phrases">Frases</button>
+    <button class="tab" role="tab" data-tab="words">Palavras</button>
+    <button class="tab" role="tab" data-tab="verbs">Verbos</button>
+    <button class="tab" role="tab" data-tab="texts">Textos</button>
+    <button class="tab" role="tab" data-tab="rules">Regras</button>
+  </div>
+</nav>
+<main class="wrap" id="view"></main>
+
+<script>
+/* ---------- DATA ---------- */
+// base | past | significado | complemento EN | pt presente | pt passado | pt futuro | complemento PT
+const RAW = `be|was|ser / estar|tired after work|estou|estava|vou estar|cansado depois do trabalho
+have|had|ter|a lot of work|tenho|tive|vou ter|muito trabalho
+do|did|fazer|my English exercises|faço|fiz|vou fazer|meus exercícios de inglês
+make|made|fazer / preparar|coffee for my family|faço|fiz|vou fazer|café para minha família
+go|went|ir|to work by bus|vou|fui|vou|para o trabalho de ônibus
+get|got|receber / conseguir|a message from my boss|recebo|recebi|vou receber|uma mensagem do meu chefe
+say|said|dizer|good morning to everyone|digo|disse|vou dizer|bom dia para todos
+know|knew|saber / conhecer|what to do|sei|soube|vou saber|o que fazer
+think|thought|pensar|about my future|penso|pensei|vou pensar|no meu futuro
+take|took|pegar / tomar|a shower in the morning|tomo|tomei|vou tomar|banho de manhã
+see|saw|ver|my friends at work|vejo|vi|vou ver|meus amigos no trabalho
+come|came|vir / chegar|home late|chego|cheguei|vou chegar|tarde em casa
+want|wanted|querer|a cup of coffee|quero|quis|vou querer|uma xícara de café
+give|gave|dar|my brother a ride|dou|dei|vou dar|carona para o meu irmão
+give up|gave up|desistir|*|||
+tell|told|contar (a alguém)|my mom about my day|conto|contei|vou contar|pra minha mãe sobre o meu dia
+work|worked|trabalhar|at the office|trabalho|trabalhei|vou trabalhar|no escritório
+feel|felt|sentir|good after lunch|me sinto|me senti|vou me sentir|bem depois do almoço
+find|found|encontrar / achar|new words in English|encontro|encontrei|vou encontrar|palavras novas em inglês
+leave|left|sair / deixar|home at six|saio|saí|vou sair|de casa às seis
+put|put|colocar|my phone on the table|coloco|coloquei|vou colocar|meu celular na mesa
+keep|kept|guardar / manter|my money in the bank|guardo|guardei|vou guardar|meu dinheiro no banco
+begin|began|começar|work at seven|começo|comecei|vou começar|a trabalhar às sete
+start|started|começar / iniciar|my day with coffee|começo|comecei|vou começar|meu dia com café
+help|helped|ajudar|my brother|ajudo|ajudei|vou ajudar|meu irmão
+talk|talked|conversar|to my friends|converso|conversei|vou conversar|com meus amigos
+hear|heard|ouvir|music on the bus|ouço|ouvi|vou ouvir|música no ônibus
+listen|listened|escutar|to English songs|escuto|escutei|vou escutar|músicas em inglês
+play|played|jogar / tocar|video games at night|jogo|joguei|vou jogar|videogame à noite
+run|ran|correr|in the park|corro|corri|vou correr|no parque
+like|liked|gostar|my job|gosto|gostei|vou gostar|do meu trabalho
+bring|brought|trazer|lunch from home|trago|trouxe|vou trazer|almoço de casa
+write|wrote|escrever|sentences in English|escrevo|escrevi|vou escrever|frases em inglês
+read|read|ler|a short text|leio|li|vou ler|um texto curto
+speak|spoke|falar|English out loud|falo|falei|vou falar|inglês em voz alta
+sit|sat|sentar|next to my friend|sento|sentei|vou sentar|ao lado do meu amigo
+pay|paid|pagar|the bills|pago|paguei|vou pagar|as contas
+meet|met|encontrar / conhecer|new people at the market|conheço|conheci|vou conhecer|gente nova na feira
+buy|bought|comprar|bread|compro|comprei|vou comprar|pão
+sell|sold|vender|pastel at the market|vendo|vendi|vou vender|pastel na feira
+eat|ate|comer|meat for lunch|como|comi|vou comer|carne no almoço
+drink|drank|beber|a lot of water|bebo|bebi|vou beber|muita água
+sleep|slept|dormir|eight hours|durmo|dormi|vou dormir|oito horas
+wake up|woke up|acordar|early|acordo|acordei|vou acordar|cedo
+learn|learned|aprender|new words|aprendo|aprendi|vou aprender|palavras novas
+study|studied|estudar|English|estudo|estudei|vou estudar|inglês
+drive|drove|dirigir|to the market|dirijo|dirigi|vou dirigir|até a feira
+open|opened|abrir|my stand at seven|abro|abri|vou abrir|minha barraca às sete
+close|closed|fechar|my stand at noon|fecho|fechei|vou fechar|minha barraca ao meio-dia
+cook|cooked|cozinhar|lunch for my family|cozinho|cozinhei|vou cozinhar|o almoço para minha família
+wash|washed|lavar|my face|lavo|lavei|vou lavar|o rosto
+watch|watched|assistir|a video in English|assisto|assisti|vou assistir|um vídeo em inglês
+try|tried|tentar|to speak English|tento|tentei|vou tentar|falar inglês
+need|needed|precisar|more time|preciso|precisei|vou precisar|de mais tempo
+ask|asked|perguntar / pedir|my boss for help|peço|pedi|vou pedir|ajuda ao meu chefe
+call|called|ligar / chamar|my mom|ligo|liguei|vou ligar|para minha mãe
+lose|lost|perder|my keys|perco|perdi|vou perder|minhas chaves
+forget|forgot|esquecer|my password|esqueço|esqueci|vou esquecer|minha senha
+understand|understood|entender|the texts|entendo|entendi|vou entender|os textos
+send|sent|enviar|emails to suppliers|envio|enviei|vou enviar|e-mails para fornecedores
+spend|spent|gastar|money on food|gasto|gastei|vou gastar|dinheiro com comida
+become|became|tornar-se|a better person|me torno|me tornei|vou me tornar|uma pessoa melhor
+build|built|construir|my own systems at work|construo|construí|vou construir|meus próprios sistemas no trabalho
+catch|caught|pegar (ônibus) / apanhar|the bus at six|pego|peguei|vou pegar|o ônibus às seis
+choose|chose|escolher|my clothes for the day|escolho|escolhi|vou escolher|minhas roupas do dia
+cut|cut|cortar|the onions for dinner|corto|cortei|vou cortar|as cebolas pro jantar
+fall asleep|fell asleep|pegar no sono|on the sofa|pego no sono|peguei no sono|vou pegar no sono|no sofá
+fix|fixed|consertar|problems on the computer|conserto|consertei|vou consertar|problemas no computador
+get up|got up|levantar (da cama)|at six o'clock|levanto|levantei|vou levantar|às seis horas
+grow|grew|crescer / cultivar|vegetables in my garden|cultivo|cultivei|vou cultivar|verduras na minha horta
+let|let|deixar|my brother use my car|deixo|deixei|vou deixar|meu irmão usar meu carro
+lift|lifted|levantar (peso)|heavy weights at the gym|levanto|levantei|vou levantar|peso pesado na academia
+look|looked|olhar|at my phone in the morning|olho|olhei|vou olhar|o celular de manhã
+look for|looked for|procurar|my keys before I leave|procuro|procurei|vou procurar|minhas chaves antes de sair
+move|moved|mover / mudar de lugar|my car to the shade|mudo|mudei|vou mudar|o carro pra sombra
+order|ordered|pedir (comida)|food on the app|peço|pedi|vou pedir|comida pelo aplicativo
+pick up|picked up|buscar (alguém)|my brother at the gym|busco|busquei|vou buscar|meu irmão na academia
+plan|planned|planejar|my tasks for the day|planejo|planejei|vou planejar|minhas tarefas do dia
+prepare|prepared|preparar|my lunch box|preparo|preparei|vou preparar|minha marmita
+rest|rested|descansar|after lunch|descanso|descansei|vou descansar|depois do almoço
+ride|rode|andar (de moto / bike)|my bike to the gym|ando|andei|vou andar|de bicicleta até a academia
+save|saved|economizar / guardar|money for my trip|economizo|economizei|vou economizar|dinheiro pra minha viagem
+show|showed|mostrar|my work to my boss|mostro|mostrei|vou mostrar|meu trabalho pro meu chefe
+sing|sang|cantar|in the car|canto|cantei|vou cantar|no carro
+stay|stayed|ficar|at home in the evening|fico|fiquei|vou ficar|em casa à noite
+stop|stopped|parar|at the bakery on the way|paro|parei|vou parar|na padaria no caminho
+teach|taught|ensinar|my brother new words|ensino|ensinei|vou ensinar|palavras novas pro meu irmão
+take out|took out|levar pra fora / tirar|the trash at night|levo|levei|vou levar|o lixo pra fora à noite
+train|trained|treinar|legs at the gym|treino|treinei|vou treinar|perna na academia
+turn on|turned on|ligar (aparelho)|the TV after dinner|ligo|liguei|vou ligar|a TV depois do jantar
+turn off|turned off|desligar|the lights before bed|desligo|desliguei|vou desligar|as luzes antes de dormir
+use|used|usar (uma coisa)|my phone too much|uso|usei|vou usar|o celular demais
+wait|waited|esperar|for the bus|espero|esperei|vou esperar|o ônibus
+walk|walked|caminhar / andar a pé|to the bakery|caminho|caminhei|vou caminhar|até a padaria
+wear|wore|usar (roupa)|a uniform at work|uso|usei|vou usar|uniforme no trabalho
+win|won|ganhar (jogo)|the game against my brother|ganho|ganhei|vou ganhar|o jogo contra o meu irmão
+worry|worried|preocupar-se|about money|me preocupo|me preocupei|vou me preocupar|com dinheiro
+check|checked|conferir|my emails|confiro|conferi|vou conferir|meus e-mails
+finish|finished|terminar|my work at five|termino|terminei|vou terminar|meu trabalho às cinco
+change|changed|trocar|my clothes after work|troco|troquei|vou trocar|de roupa depois do trabalho
+clean|cleaned|limpar|the kitchen after dinner|limpo|limpei|vou limpar|a cozinha depois do jantar
+arrive|arrived|chegar|at the gym at seven|chego|cheguei|vou chegar|na academia às sete
+remember|remembered|lembrar|my password|lembro|lembrei|vou lembrar|minha senha
+go out|went out|sair (passear)|with my friends|saio|saí|vou sair|com meus amigos`;
+
+const REGULAR = new Set("want work start help talk listen play like learn study open close cook wash watch try need ask call fix lift look move order plan prepare rest save stay stop train use wait walk worry check finish change clean arrive remember".split(" ").concat(["look for","pick up","turn on","turn off"]));
+const PRES = {be:"am"};
+const NOTES = {
+  read:"No passado, read se escreve igual, mas se fala \"réd\".",
+  be:"Com he/she/it fica: he is / he was. Com you/we/they: you are / you were.",
+  have:"Com he/she/it, no presente fica has: he has.",
+  "give up":"Expressão de duas palavras. Usada muito na negativa: don't / didn't / won't give up.",
+  study:"Termina em consoante + y: troca o y por ied. study → studied, try → tried.",
+  put:"O passado é igual ao presente: put → put.",
+  "wake up":"Get up = levantar. Wake up = acordar.",
+  try:"Depois de try vem to + verbo: try to speak.",
+  plan:"Dobra a última letra: plan → planned. Igual stop → stopped.",
+  stop:"Dobra a última letra: stop → stopped.",
+  worry:"Consoante + y vira -ied: worry → worried.",
+  catch:"Caught se fala \"cót\".",
+  teach:"Taught se fala \"tót\". Igual caught e thought.",
+  build:"Built se fala \"bilt\".",
+  cut:"O passado é igual ao presente: cut → cut.",
+  let:"O passado é igual ao presente: let → let.",
+  wait:"Esperar alguém ou alguma coisa: wait for. I wait for the bus.",
+  look:"Look at = olhar pra algo. Look for = procurar.",
+  "look for":"Look for = procurar. Find = achar. I looked for my keys and found them.",
+  wear:"Wear é usar roupa, sapato, óculos. Use é usar uma coisa: phone, computer.",
+  use:"Use é usar uma coisa. Pra roupa, use wear.",
+  "pick up":"Pick up = buscar alguém ou pegar algo do chão.",
+  "get up":"Get up = levantar da cama. Wake up = acordar.",
+  "fall asleep":"Fall asleep = pegar no sono sem querer. Go to bed = ir dormir."
+};
+const TIME_EN = ["Every day","Yesterday","Tomorrow"];
+const TIME_PT = ["Todo dia","Ontem","Amanhã"];
+const TNAME = ["Presente","Passado","Futuro"]; // index by sentence order: 0 pres,1 past,2 fut
+
+const VERBS = RAW.trim().split("\n").map(line=>{
+  const [b,pa,pt,c,p0,p1,p2,pc] = line.split("|");
+  const pres = PRES[b]||b;
+  let en, ptS, hv;
+  if(c==="*"){ // give up
+    en = ["I don't give up.","I didn't give up.","I won't give up."];
+    hv = ["don't give up","didn't give up","won't give up"];
+    ptS = ["Eu não desisto.","Eu não desisti.","Eu não vou desistir."];
+  } else {
+    en = [`Every day, I ${pres} ${c}.`,`Yesterday, I ${pa} ${c}.`,`Tomorrow, I will ${b} ${c}.`];
+    hv = [pres,pa,"will "+b];
+    ptS = [`Todo dia, eu ${p0} ${pc}.`,`Ontem, eu ${p1} ${pc}.`,`Amanhã, eu ${p2} ${pc}.`];
+  }
+  return {b,pa,pres,pt,en,hv,ptS,reg:REGULAR.has(b)};
+});
+
+const TEXTS = [
+ {title:"My day", v:[
+  "Every day, I [get up] early and [go] to work. I [take] the bus and [see] many people. At work, I [have] a lot to do, but I [feel] good. After work, I [come] home, [eat] with my family, and [think] about my day.",
+  "Yesterday, I [got up] early and [went] to work. I [took] the bus and [saw] many people. At work, I [had] a lot to do, but I [felt] good. After work, I [came] home, [ate] with my family, and [thought] about my day.",
+  "Tomorrow, I [will get up] early and [go] to work. I [will take] the bus and [see] many people. At work, I [will have] a lot to do, but I [will feel] good. After work, I [will come] home, [eat] with my family, and [think] about my day."],
+  pt:[
+  "Todo dia, eu levanto cedo e vou para o trabalho. Pego o ônibus e vejo muitas pessoas. No trabalho, tenho muita coisa pra fazer, mas me sinto bem. Depois do trabalho, volto pra casa, como com minha família e penso sobre o meu dia.",
+  "Ontem, eu levantei cedo e fui para o trabalho. Peguei o ônibus e vi muitas pessoas. No trabalho, tive muita coisa pra fazer, mas me senti bem. Depois do trabalho, voltei pra casa, comi com minha família e pensei sobre o meu dia.",
+  "Amanhã, eu vou levantar cedo e ir para o trabalho. Vou pegar o ônibus e ver muitas pessoas. No trabalho, vou ter muita coisa pra fazer, mas vou me sentir bem. Depois do trabalho, vou voltar pra casa, comer com minha família e pensar sobre o meu dia."]},
+ {title:"At the market", v:[
+  "Every Saturday, I [wake up] at five. I [go] to the market and [open] my stand. Many people [come] to eat pastel. I [sell] a lot and [talk] with my customers. At noon, I [close] the stand, [count] the money and [go] home. I [am] tired, but I [feel] happy.",
+  "Last Saturday, I [woke up] at five. I [went] to the market and [opened] my stand. Many people [came] to eat pastel. I [sold] a lot and [talked] with my customers. At noon, I [closed] the stand, [counted] the money and [went] home. I [was] tired, but I [felt] happy.",
+  "Next Saturday, I [will wake up] at five. I [will go] to the market and [open] my stand. Many people [will come] to eat pastel. I [will sell] a lot and [talk] with my customers. At noon, I [will close] the stand, [count] the money and [go] home. I [will be] tired, but I [will feel] happy."],
+  pt:[
+  "Todo sábado, eu acordo às cinco. Vou para a feira e abro minha barraca. Muitas pessoas vêm comer pastel. Vendo bastante e converso com meus clientes. Ao meio-dia, fecho a barraca, conto o dinheiro e vou pra casa. Estou cansado, mas me sinto feliz.",
+  "No sábado passado, eu acordei às cinco. Fui para a feira e abri minha barraca. Muitas pessoas vieram comer pastel. Vendi bastante e conversei com meus clientes. Ao meio-dia, fechei a barraca, contei o dinheiro e fui pra casa. Estava cansado, mas me senti feliz.",
+  "No próximo sábado, eu vou acordar às cinco. Vou para a feira e vou abrir minha barraca. Muitas pessoas vão vir comer pastel. Vou vender bastante e conversar com meus clientes. Ao meio-dia, vou fechar a barraca, contar o dinheiro e ir pra casa. Vou estar cansado, mas vou me sentir feliz."]},
+ {title:"At the office", v:[
+  "Every morning, I [get] to the office at seven. I [turn on] my computer and [check] my emails. I [send] messages to suppliers and [create] purchase orders. At lunch, I [eat] with my friends. In the afternoon, I [make] reports for my boss. I [learn] something new every day.",
+  "Yesterday, I [got] to the office at seven. I [turned on] my computer and [checked] my emails. I [sent] messages to suppliers and [created] purchase orders. At lunch, I [ate] with my friends. In the afternoon, I [made] reports for my boss. I [learned] something new.",
+  "Tomorrow, I [will get] to the office at seven. I [will turn on] my computer and [check] my emails. I [will send] messages to suppliers and [create] purchase orders. At lunch, I [will eat] with my friends. In the afternoon, I [will make] reports for my boss. I [will learn] something new."],
+  pt:[
+  "Toda manhã, eu chego ao escritório às sete. Ligo meu computador e confiro meus e-mails. Envio mensagens para fornecedores e crio pedidos de compra. No almoço, como com meus amigos. À tarde, faço relatórios para meu chefe. Aprendo algo novo todo dia.",
+  "Ontem, eu cheguei ao escritório às sete. Liguei meu computador e conferi meus e-mails. Enviei mensagens para fornecedores e criei pedidos de compra. No almoço, comi com meus amigos. À tarde, fiz relatórios para meu chefe. Aprendi algo novo.",
+  "Amanhã, eu vou chegar ao escritório às sete. Vou ligar meu computador e conferir meus e-mails. Vou enviar mensagens para fornecedores e criar pedidos de compra. No almoço, vou comer com meus amigos. À tarde, vou fazer relatórios para meu chefe. Vou aprender algo novo."]},
+ {title:"Learning English", v:[
+  "I [study] English a little every day. I [read] short texts and [write] sentences about my life. Sometimes I [make] mistakes, but I [don't give up]. In the car, I [listen] to songs and [try] to sing along. Every week, I [feel] more confident.",
+  "Last week, I [studied] English a little every day. I [read] short texts and [wrote] sentences about my life. Sometimes I [made] mistakes, but I [didn't give up]. In the car, I [listened] to songs and [tried] to sing along. Every week, I [felt] more confident.",
+  "Next week, I [will study] English a little every day. I [will read] short texts and [write] sentences about my life. Sometimes I [will make] mistakes, but I [won't give up]. In the car, I [will listen] to songs and [try] to sing along. Every week, I [will feel] more confident."],
+  pt:[
+  "Eu estudo um pouco de inglês todo dia. Leio textos curtos e escrevo frases sobre a minha vida. Às vezes cometo erros, mas não desisto. No carro, escuto músicas e tento cantar junto. A cada semana, me sinto mais confiante.",
+  "Semana passada, eu estudei um pouco de inglês todo dia. Li textos curtos e escrevi frases sobre a minha vida. Às vezes cometi erros, mas não desisti. No carro, escutei músicas e tentei cantar junto. A cada semana, me senti mais confiante.",
+  "Semana que vem, eu vou estudar um pouco de inglês todo dia. Vou ler textos curtos e escrever frases sobre a minha vida. Às vezes vou cometer erros, mas não vou desistir. No carro, vou escutar músicas e tentar cantar junto. A cada semana, vou me sentir mais confiante."]}
+];
+
+const RULES = [
+ {t:"I é sempre maiúsculo", p:"Em qualquer lugar da frase. Dias da semana e idiomas também: Saturday, English.",
+  ex:[["no","i went home"],["yes","I went home."],["no","i study inglish on saturday"],["yes","I study English on Saturday."]]},
+ {t:"Para + verbo = to + verbo", p:"Quando o \"para\" vem antes de um verbo, use to. Nunca for + ing.",
+  ex:[["no","I went to the kitchen for cooking."],["yes","I went to the kitchen to cook."],["yes","I woke up early to wash my stand."]]},
+ {t:"A palavra de tempo escolhe o verbo", p:"Antes de escrever, procure a palavra de tempo na frase.",
+  table:[["Passado","yesterday, last week, last year, two days ago"],["Presente","every day, always, usually, now"],["Futuro (will)","tomorrow, next week, next year, soon"]]},
+ {t:"Futuro: will + verbo normal", p:"O verbo não muda. Numa lista de ações, o will aparece uma vez só. Negativa: won't (will not).",
+  ex:[["no","Tomorrow I will went to work."],["yes","Tomorrow I will go to work."],["yes","I will come home and eat with my family."],["yes","I won't give up."]]},
+ {t:"Passado regular: -ed", p:"Termina em e: só -d (like → liked). Consoante + y: -ied (study → studied). Os irregulares precisam ser decorados: veja a aba Verbos.",
+  ex:[["yes","I worked a lot yesterday."],["yes","I studied English."],["yes","I liked the text."]]},
+ {t:"Como se fala o -ed", p:"O -ed quase nunca é \"éd\". Ele tem três sons:",
+  table:[["som de t","worked (uôrkt), helped, washed, watched"],["som de d","played (plêid), called, opened, listened"],["som de id","só depois de t ou d: wanted (uóntid), needed, started"]]},
+ {t:"He, she, it no presente: + s", p:"Só no presente e só com he, she, it. Go e do ganham -es, have vira has.",
+  ex:[["no","He work at a big company."],["yes","He works at a big company."],["yes","She goes to the market."],["yes","He has a lot of work."]]},
+ {t:"Negativa e pergunta no passado: did", p:"Com didn't ou did, o verbo volta pro normal. O did já mostra que é passado.",
+  ex:[["no","I didn't went to work."],["yes","I didn't go to work."],["yes","Did you sell a lot?"]]},
+ {t:"Negativa no presente: don't / doesn't", p:"Don't com I, you, we, they. Doesn't com he, she, it, e aí o verbo perde o -s.",
+  ex:[["yes","I don't like coffee."],["no","He doesn't likes coffee."],["yes","He doesn't like coffee."]]},
+ {t:"Adjetivo vem antes", p:"Em inglês a característica vem antes da coisa. E \"mais novo\" é uma palavra só: younger.",
+  ex:[["no","my brother more younger"],["yes","my younger brother"],["yes","a big company"]]},
+ {t:"Home não leva to", p:"Go home, come home, get home. Mas go to work, go to the market.",
+  ex:[["no","I go to my home."],["yes","I go home."],["yes","I came home late."]]},
+ {t:"At, in, on", p:"At pra horário e lugar exato. In pra partes do dia, mês e ano. On pra dias.",
+  table:[["at","at seven, at night, at work, at the market"],["in","in the morning, in the afternoon, in October"],["on","on Saturday, on the weekend (americano)"]]},
+ {t:"People já é plural", p:"Uma pessoa: person. Várias: people. Nunca peoples.",
+  ex:[["no","I saw many peoples."],["yes","I saw many people."]]}
+];
+
+/* palavras e frases: "# Categoria" abre um grupo; cada linha é inglês|português */
+const WORDS_RAW = `# Casa
+house|casa
+bedroom|quarto
+bathroom|banheiro
+kitchen|cozinha
+living room|sala
+bed|cama
+pillow|travesseiro
+towel|toalha
+soap|sabonete
+toothbrush|escova de dente
+shower|chuveiro / banho
+mirror|espelho
+door|porta
+window|janela
+key|chave
+clothes|roupas
+shoes|sapatos
+trash|lixo
+alarm clock|despertador
+fan|ventilador
+air conditioning|ar-condicionado
+# Comida
+breakfast|café da manhã
+lunch|almoço
+dinner|jantar
+snack|lanche
+coffee|café
+milk|leite
+bread|pão
+butter|manteiga
+egg|ovo
+rice|arroz
+beans|feijão
+meat|carne
+chicken|frango
+beef|carne de boi
+fish|peixe
+salad|salada
+cheese|queijo
+juice|suco
+water|água
+salt|sal
+sugar|açúcar
+plate|prato
+fork|garfo
+knife|faca
+spoon|colher
+glass|copo
+cup|xícara
+bill|conta (do restaurante)
+# Academia e corpo
+gym|academia
+workout|treino
+weight|peso
+set|série
+rep|repetição
+treadmill|esteira
+legs|pernas
+arms|braços
+chest|peito
+back|costas
+shoulders|ombros
+belly|barriga
+muscle|músculo
+sweat|suor
+water bottle|garrafinha de água
+protein|proteína
+warm-up|aquecimento
+stretching|alongamento
+strong|forte
+sore|dolorido
+# Trabalho
+office|escritório
+boss|chefe
+coworker|colega de trabalho
+meeting|reunião
+email|e-mail
+report|relatório
+spreadsheet|planilha
+supplier|fornecedor
+purchase order|pedido de compra
+invoice|nota fiscal
+contract|contrato
+deadline|prazo
+task|tarefa
+schedule|agenda / horário
+salary|salário
+uniform|uniforme
+break|intervalo / pausa
+shift|turno
+company|empresa
+job|emprego
+# Feira e dinheiro
+market|feira / mercado
+stand|barraca
+customer|cliente
+price|preço
+money|dinheiro
+change|troco
+cash|dinheiro vivo
+card|cartão
+cheap|barato
+expensive|caro
+sale|venda / promoção
+oil|óleo
+dough|massa
+filling|recheio
+napkin|guardanapo
+bag|sacola
+profit|lucro
+receipt|comprovante / recibo
+# Tempo e dias
+today|hoje
+yesterday|ontem
+tomorrow|amanhã
+morning|manhã
+afternoon|tarde
+evening|noite (começo da noite)
+night|noite
+week|semana
+weekend|fim de semana
+month|mês
+year|ano
+early|cedo
+late|tarde / atrasado
+now|agora
+always|sempre
+never|nunca
+sometimes|às vezes
+usually|geralmente
+Monday|segunda-feira
+Friday|sexta-feira
+Saturday|sábado
+Sunday|domingo
+# Pessoas
+family|família
+mom|mãe
+dad|pai
+brother|irmão
+sister|irmã
+son|filho
+daughter|filha
+wife|esposa
+husband|marido
+girlfriend|namorada
+boyfriend|namorado
+friend|amigo
+neighbor|vizinho
+grandmother|avó
+grandfather|avô
+uncle|tio
+aunt|tia
+cousin|primo / prima
+people|pessoas
+children|crianças
+# Ligação
+and|e
+but|mas
+because|porque
+so|então (por isso)
+then|então / depois
+after|depois de
+before|antes de
+first|primeiro
+later|mais tarde
+also|também
+with|com
+without|sem
+very|muito
+a lot|bastante
+a little|um pouco
+again|de novo
+already|já
+still|ainda
+maybe|talvez
+almost|quase
+# Adjetivos
+good|bom
+bad|ruim
+big|grande
+small|pequeno
+hot|quente
+cold|frio
+happy|feliz
+sad|triste
+tired|cansado
+hungry|com fome
+thirsty|com sede
+busy|ocupado
+easy|fácil
+hard|difícil
+new|novo
+old|velho
+clean|limpo
+dirty|sujo
+fast|rápido
+slow|devagar
+ready|pronto`;
+const PHRASES_RAW = `# Manhã
+Today I woke up at six.|Hoje eu acordei às seis.
+I turned off the alarm clock.|Desliguei o despertador.
+I got up and went to the bathroom.|Levantei e fui ao banheiro.
+I brushed my teeth.|Escovei os dentes.
+I made coffee.|Fiz café.
+I took a shower.|Tomei banho.
+I got dressed.|Me vesti.
+I had breakfast with my family.|Tomei café da manhã com a minha família.
+I took my keys and left home.|Peguei minhas chaves e saí de casa.
+I drove to work.|Fui de carro pro trabalho.
+# Trabalho
+I got to work at seven.|Cheguei no trabalho às sete.
+Good morning, everyone!|Bom dia, pessoal!
+I checked my emails.|Conferi meus e-mails.
+I had a meeting with my boss.|Tive uma reunião com meu chefe.
+I'm very busy today.|Estou muito ocupado hoje.
+Can you help me, please?|Você pode me ajudar, por favor?
+I sent the report.|Enviei o relatório.
+I need to finish this today.|Preciso terminar isso hoje.
+Let's take a break.|Vamos fazer uma pausa.
+I had lunch at the cafeteria.|Almocei no refeitório.
+I'll call you later.|Te ligo mais tarde.
+See you tomorrow!|Até amanhã!
+# Academia
+I went to the gym after work.|Fui pra academia depois do trabalho.
+Today is leg day.|Hoje é dia de perna.
+I warmed up on the treadmill.|Aqueci na esteira.
+I did three sets of twelve reps.|Fiz três séries de doze repetições.
+Can I use this machine?|Posso usar esse aparelho?
+How many sets do you have left?|Quantas séries ainda faltam pra você?
+I lifted heavier today.|Peguei mais peso hoje.
+I'm sore from yesterday.|Estou dolorido de ontem.
+I need to drink more water.|Preciso beber mais água.
+Good workout, bro!|Bom treino, mano!
+I stretched after the workout.|Alonguei depois do treino.
+# Comida e jantar
+I'm hungry.|Estou com fome.
+What's for dinner?|O que tem pro jantar?
+I cooked rice, beans and chicken.|Fiz arroz, feijão e frango.
+Dinner is ready!|O jantar está pronto!
+Can you pass me the salt?|Pode me passar o sal?
+This is delicious.|Isso está delicioso.
+I'm full.|Estou satisfeito.
+We had dinner together.|Jantamos juntos.
+I washed the dishes.|Lavei a louça.
+Let's order a pizza.|Vamos pedir uma pizza.
+A table for two, please.|Uma mesa para dois, por favor.
+Can I have the bill, please?|Pode trazer a conta, por favor?
+# Feira
+Good morning! What would you like?|Bom dia! O que você vai querer?
+A meat pastel, please.|Um pastel de carne, por favor.
+It's ten reais.|São dez reais.
+Do you have change?|Você tem troco?
+Cash or card?|Dinheiro ou cartão?
+Here is your change.|Aqui está seu troco.
+Thank you! Come back soon!|Obrigado! Volte sempre!
+We sold a lot today.|Vendemos bastante hoje.
+I closed the stand at noon.|Fechei a barraca ao meio-dia.
+# Conversa
+How are you?|Como você está?
+I'm fine, thanks. And you?|Estou bem, obrigado. E você?
+How was your day?|Como foi o seu dia?
+My day was good.|Meu dia foi bom.
+What did you do today?|O que você fez hoje?
+I don't understand.|Eu não entendo.
+Can you repeat, please?|Pode repetir, por favor?
+Can you speak slowly?|Pode falar devagar?
+What time is it?|Que horas são?
+I'm on my way.|Estou a caminho.
+I'm running late.|Estou atrasado.
+No problem.|Sem problema.
+Me too.|Eu também.
+I agree.|Concordo.
+Nice to meet you.|Prazer em te conhecer.
+# Noite
+I got home at six.|Cheguei em casa às seis.
+I took off my shoes.|Tirei os sapatos.
+I watched TV with my brother.|Assisti TV com meu irmão.
+I studied English for fifteen minutes.|Estudei inglês por quinze minutos.
+I took out the trash.|Levei o lixo pra fora.
+I set the alarm for six.|Coloquei o despertador pras seis.
+I'm tired. I'm going to bed.|Estou cansado. Vou dormir.
+I went to bed at ten.|Fui dormir às dez.
+Good night!|Boa noite!
+# Fim de semana
+What are you doing this weekend?|O que você vai fazer neste fim de semana?
+I'm going to the market on Saturday.|Vou pra feira no sábado.
+Let's go out tonight.|Vamos sair hoje à noite.
+I stayed home and rested.|Fiquei em casa e descansei.
+We had a barbecue.|Fizemos um churrasco.
+I visited my parents.|Visitei meus pais.
+I slept late on Sunday.|Dormi até tarde no domingo.
+It was a great weekend.|Foi um fim de semana ótimo.`;
+function parseCat(raw){ const out=[]; let cat=""; raw.trim().split("\n").forEach(l=>{ l=l.trim(); if(!l) return; if(l[0]==="#"){ cat=l.slice(1).trim(); return; } const [en,pt]=l.split("|"); out.push({en,pt,cat}); }); return out; }
+const WORDS=parseCat(WORDS_RAW), PHRASES=parseCat(PHRASES_RAW);
+/* erros comuns: "# Categoria"; cada linha é errado|certo (alternativas separadas por " / ")|explicação */
+const ERRORS_RAW = `# Ordem das palavras
+I have a car white.|I have a white car.|Em inglês a característica vem antes da coisa: white car = carro branco.
+I bought a shirt blue.|I bought a blue shirt.|A cor vem antes: blue shirt = camisa azul.
+She is a girl very beautiful.|She is a very beautiful girl.|Very + adjetivo vem antes da coisa: a very beautiful girl.
+The house of my brother is big.|My brother's house is big.|Pra dizer de quem é, use 's: my brother's house = a casa do meu irmão.
+I like very much pizza.|I like pizza very much.|Very much vai no fim da frase.
+I go always to the gym.|I always go to the gym.|Always, usually e never vêm antes do verbo.
+I always am tired.|I am always tired.|Com am, is, are, o always vem depois: I am always tired.
+I'm late 10 minutes.|I'm 10 minutes late.|O tempo vem antes do late: 10 minutes late.
+Where you live?|Where do you live?|Pergunta no presente precisa do do ou does.
+What means this word?|What does this word mean?|Pergunta com does, e o verbo fica normal: mean.
+# Ao pé da letra
+I have 25 years.|I am 25 years old.|Idade em inglês usa be: I am 25 (years old).
+I am with hunger.|I am hungry.|Fome e sede usam be: I am hungry, I am thirsty.
+I have cold.|I am cold.|Sentir frio = be cold. I have a cold = estou resfriado.
+I took a decision.|I made a decision.|Tomar uma decisão = make a decision.
+Can I make a question?|Can I ask a question?|Fazer pergunta = ask a question.
+I won a gift from my mom.|I got a gift from my mom.|Ganhar presente = get. Win é ganhar jogo ou prêmio.
+I lost the bus.|I missed the bus.|Perder ônibus, voo ou aula = miss.
+I did a barbecue.|We had a barbecue.|Fazer churrasco = have a barbecue.
+It has many people here.|There are many people here.|Ter no sentido de existir = there is / there are.
+It has a bakery near my house.|There is a bakery near my house.|Tem (existe) uma = there is.
+I stayed sad.|I got sad.|Ficar, no sentido de mudar de estado = get: got sad, got tired.
+I'm agree.|I agree.|Agree já é verbo, não usa am.
+My dream is to know the United States.|My dream is to visit the United States.|Conhecer um lugar = visit. Know é pra pessoa ou coisa que você sabe.
+How do you call this in English?|What do you call this in English? / How do you say this in English?|Use What do you call ou How do you say.
+I have a doubt.|I have a question.|Numa conversa, dúvida = question.
+I'm going to make gym.|I'm going to work out.|Fazer academia = work out ou go to the gym.
+# Falsos amigos
+I pretend to travel next year.|I intend to travel next year.|Pretend = fingir. Pretender = intend ou plan.
+Actually, I work at a big company.|Currently, I work at a big company.|Actually = na verdade. Atualmente = currently ou nowadays.
+Eventually I go to the gym.|Sometimes I go to the gym.|Eventually = no fim, finalmente. Eventualmente = sometimes.
+I assisted the game on TV.|I watched the game on TV.|Assistir = watch. Assist = ajudar.
+All my parents came: uncles, aunts and cousins.|All my relatives came: uncles, aunts and cousins.|Parents = pai e mãe. Parentes = relatives.
+I'm going to the library to buy a book.|I'm going to the bookstore to buy a book.|Library = biblioteca. Livraria = bookstore.
+My dad works in a fabric.|My dad works in a factory.|Fabric = tecido. Fábrica = factory.
+It's my costume to wake up early.|I usually wake up early.|Costume em inglês é fantasia. Pra hábito, use usually.
+My brother is very sensible.|My brother is very sensitive.|Sensible = sensato. Sensível = sensitive.
+I'm boring today, nothing to do.|I'm bored today, nothing to do.|Boring = chato, que dá tédio. Bored = entediado.
+I'm interesting in English.|I'm interested in English.|Interesting = interessante. Interessado = interested.
+# Verbos
+He work at a big company.|He works at a big company.|He, she, it no presente: verbo + s.
+She don't like coffee.|She doesn't like coffee.|He, she, it na negativa: doesn't.
+I didn't went to work.|I didn't go to work.|Depois de didn't, o verbo volta pro normal.
+Did you went to the gym?|Did you go to the gym?|Com did, o verbo fica normal: go.
+Yesterday I go to the market.|Yesterday I went to the market.|Yesterday pede o passado: went.
+I can to speak English.|I can speak English.|Depois de can, não vai to.
+I want go home.|I want to go home.|Want precisa do to: want to go.
+I need go to the bank.|I need to go to the bank.|Need precisa do to: need to go.
+I am work now.|I am working now.|Acontecendo agora: am + verbo com -ing.
+I enjoy to cook.|I enjoy cooking.|Depois de enjoy, o verbo vem com -ing.
+I live here since 2020.|I have lived here since 2020.|Desde (since) até hoje pede have + particípio.
+# Preposições
+I'm in the gym.|I'm at the gym.|Lugar onde você está fazendo algo: at the gym, at work, at the market.
+See you in Monday.|See you on Monday.|Dias da semana usam on.
+I wake up in six o'clock.|I wake up at six o'clock.|Horário usa at.
+It depends of the price.|It depends on the price.|Depender de = depend on.
+I'm married with her.|I'm married to her.|Casado com = married to.
+I'm thinking in my future.|I'm thinking about my future.|Pensar em = think about.
+I listen music in the car.|I listen to music in the car.|Listen precisa do to: listen to music.
+Can you explain me this?|Can you explain this to me?|Explain this to me, nunca explain me.
+I arrived in home late.|I got home late.|Home não leva preposição: get home, go home.
+# Plural e artigos
+I need informations.|I need information.|Information não tem plural.
+The life is hard.|Life is hard.|Falando de algo em geral, sem the.
+I love the pizza.|I love pizza.|Do que você gosta em geral, sem the.
+He is engineer.|He is an engineer.|Profissão leva a ou an: an engineer, a driver.
+I have two childs.|I have two children.|Plural irregular: child → children.
+My foots hurt.|My feet hurt.|Plural irregular: foot → feet.
+# Frase sem sujeito
+Is very hot today.|It is very hot today.|Em inglês a frase precisa de sujeito. Pro tempo, use it.
+Is raining.|It is raining.|Chuva e tempo: it is raining.
+Is possible?|Is it possible?|A pergunta também precisa do it.
+I no like coffee.|I don't like coffee.|Negativa no presente: don't + verbo.
+I don't like it. — Me too.|I don't like it. — Me neither.|Concordar com uma negativa: me neither.`;
+const ERRORS=(()=>{ const out=[]; let cat=""; ERRORS_RAW.trim().split("\n").forEach(l=>{ l=l.trim(); if(!l) return; if(l[0]==="#"){ cat=l.slice(1).trim(); return; }
+  const [bad,good,why]=l.split("|"); out.push({id:bad,bad,good:good.split(" / "),why,cat}); }); return out; })();
+const ERROR_CATS=[...new Set(ERRORS.map(x=>x.cat))];
+const WORD_CATS=[...new Set(WORDS.map(x=>x.cat))], PHRASE_CATS=[...new Set(PHRASES.map(x=>x.cat))];
+
+/* ---------- STORAGE ---------- */
+const KEY="english-gym-v1";
+const today=()=>new Date().toLocaleDateString("en-CA");
+function fix(s){
+  if(!s||typeof s!=="object") s={};
+  s.v=s.v||{}; s.rate=s.rate||1; s.log=s.log||{}; s.cards=s.cards||{}; s.e=s.e||{}; s.goal=s.goal||10;
+  return s;
+}
+function load(){ let s=null; try{ s=JSON.parse(localStorage.getItem(KEY)); }catch(e){} return fix(s); }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(store)); }catch(e){} }
+const store=load();
+const vs=b=>store.v[b]||(store.v[b]={s:0,c:0,w:0});
+const isMastered=b=>(store.v[b]&&store.v[b].s>=3);
+
+/* registro do dia: sec = tempo ativo, a = atividades, ok = acertos, cards/train/texts/phrases = por tipo */
+function addDays(d,n){ const x=new Date(d+"T12:00:00"); x.setDate(x.getDate()+n); return x.toLocaleDateString("en-CA"); }
+function dayLog(d){ d=d||today(); return store.log[d]||(store.log[d]={sec:0,a:0}); }
+function countAct(kind){ const L=dayLog(); L.a++; L[kind]=(L[kind]||0)+1; save(); }
+function dayDone(d){ const L=store.log[d]; return !!L&&((L.a||0)>0||(L.sec||0)>=60); }
+function streak(){ let d=today(),n=0; if(!dayDone(d)) d=addDays(d,-1); while(dayDone(d)){ n++; d=addDays(d,-1); } return n; }
+function bestStreak(){ let best=0,run=0,prev=null; Object.keys(store.log).filter(dayDone).sort().forEach(d=>{ run=(prev&&addDays(prev,1)===d)?run+1:1; best=Math.max(best,run); prev=d; }); return best; }
+function fmtMin(sec){ const m=Math.floor((sec||0)/60); return m<60?m+" min":Math.floor(m/60)+"h"+String(m%60).padStart(2,"0"); }
+const BOX_DAYS=[0,1,3,7,14,30];
+function dueCount(){ const t=today(); let n=0; for(const id in store.cards) if(store.cards[id].d<=t) n++; return n; }
+function learnedCount(){ let n=0; for(const id in store.cards) if(store.cards[id].b>=3) n++; return n; }
+
+/* ---------- SPEECH ---------- */
+const synth=("speechSynthesis" in window)?window.speechSynthesis:null;
+let voice=null;
+function pickVoice(){ if(!synth) return; const v=synth.getVoices(); voice=v.find(x=>/en[-_]US/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null; }
+if(synth){ pickVoice(); synth.onvoiceschanged=pickVoice; } else document.body.classList.add("nosay");
+function speak(text,onend){
+  if(!synth) return;
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="en-US"; if(voice) u.voice=voice; u.rate=store.rate;
+  if(onend) u.onend=onend;
+  synth.speak(u);
+}
+
+/* ---------- HELPERS ---------- */
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm=s=>s.toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z' ]/g," ").replace(/\s+/g," ").trim();
+const sayBtn=t=>`<button class="say" data-say="${esc(t)}" aria-label="Ouvir">🔊</button>`;
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function enHTML(v,i){
+  let s=esc(v.en[i]);
+  const tw=TIME_EN[i];
+  if(s.startsWith(tw)) s=`<span class="tw">${tw}</span>`+s.slice(tw.length);
+  const h=esc(v.hv[i]);
+  const k=s.indexOf(" "+h+" ")>=0?s.indexOf(" "+h+" ")+1:s.indexOf(" "+h+".")>=0?s.indexOf(" "+h+".")+1:s.indexOf(h);
+  const t=["t1","t0","t2"][i];
+  if(k>=0) s=s.slice(0,k)+`<b class="${t}">${h}</b>`+s.slice(k+h.length);
+  return s;
+}
+const SENT_CLASS=["t1","t0","t2"]; // present, past, future colors
+
+/* ---------- STATE ---------- */
+const state={tab:"home",q:"",filter:"all",hide:false,open:null,mode:"past",cur:null,text:0,tense:1,showPT:false,pq:"",pcat:"all",wq:"",wcat:"all",whide:false,wrev:new Set(),seqId:0,ecat:"all",
+  fc:{deck:"phrases",cat:"all",dir:"pt",queue:null,idx:0,flip:false,right:0,wrong:0,retry:{}}};
+
+/* ---------- RENDER ---------- */
+const view=document.getElementById("view");
+function renderStats(){
+  const m=VERBS.filter(v=>isMastered(v.b)).length;
+  document.getElementById("stats").innerHTML=
+    `<div class="stat"><b>🔥 ${streak()}</b><span>dias seguidos</span></div>
+     <div class="stat"><b>${fmtMin(dayLog().sec)}</b><span>hoje</span></div>
+     <div class="stat"><b>${m}/${VERBS.length}</b><span>verbos</span></div>
+     <button class="speed" data-act="speed">${store.rate<1?"🐢 Voz devagar":"🔊 Voz normal"}</button>`;
+}
+function render(){
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.tab===state.tab));
+  renderStats();
+  ({home:renderHome,cards:renderCards,train:renderTrain,errors:renderErrors,phrases:renderPhrases,words:renderWords,verbs:renderVerbs,texts:renderTexts,rules:renderRules})[state.tab]();
+}
+
+function renderVerbs(){
+  const q=norm(state.q);
+  const list=VERBS.filter(v=>{
+    if(state.filter==="irr"&&v.reg) return false;
+    if(state.filter==="reg"&&!v.reg) return false;
+    if(!q) return true;
+    return norm(v.b+" "+v.pa+" "+v.pt).includes(q);
+  });
+  view.innerHTML=`
+  <h2>Os ${VERBS.length} verbos mais usados</h2>
+  <p class="hint">Toque num verbo pra ver as frases. Pra treinar, esconda o passado e tente lembrar antes de tocar.</p>
+  <div class="controls">
+    <input class="search" type="search" placeholder="Buscar em inglês ou português" value="${esc(state.q)}" data-search="q" aria-label="Buscar verbo">
+    <button class="chip" aria-pressed="${state.filter==="all"}" data-filter="all">Todos</button>
+    <button class="chip" aria-pressed="${state.filter==="irr"}" data-filter="irr">Irregulares</button>
+    <button class="chip" aria-pressed="${state.filter==="reg"}" data-filter="reg">Regulares (-ed)</button>
+    <button class="chip t0" aria-pressed="${state.hide}" data-act="hide">${state.hide?"Mostrar o passado":"Esconder o passado"}</button>
+  </div>
+  <div class="vhead" aria-hidden="true"><span class="c0">Significado</span><span class="c1">Presente</span><span class="c2">Passado</span><span class="c3">Futuro</span></div>
+  <div class="vlist">${list.length?list.map(v=>{
+    const open=state.open===v.b;
+    const past=state.hide&&!open?`<span class="hidden-past">${esc(v.pa)}</span>`:esc(v.pa);
+    return `<div class="verb">
+      <button class="vrow" data-open="${esc(v.b)}" aria-expanded="${open}">
+        <span class="pt">${esc(v.pt)}${v.reg?"":'<span class="tag">irregular</span>'}${isMastered(v.b)?'<span class="mastered">✓ dominado</span>':""}</span>
+        <span class="f c1">${esc(v.pres)}</span>
+        <span class="f c2">${past}</span>
+        <span class="f c3">will ${esc(v.b)}</span>
+      </button>
+      ${open?`<div class="detail">
+        ${[1,0,2].map(i=>`<div class="sent ${SENT_CLASS[i]}"><div style="flex:1"><div class="en">${enHTML(v,i)}</div><div class="ptx">${esc(v.ptS[i])}</div></div>${sayBtn(v.en[i])}</div>`).join("")}
+        ${NOTES[v.b]?`<div class="note">${esc(NOTES[v.b])}</div>`:""}
+      </div>`:""}
+    </div>`;}).join(""):`<div class="empty">Nenhum verbo encontrado. Tente outra palavra.</div>`}</div>`;
+}
+
+/* training */
+function pickVerb(){
+  const pool=VERBS.filter(v=>!isMastered(v.b));
+  const src=(pool.length&&Math.random()<0.8)?pool:VERBS;
+  // quem você erra mais aparece mais
+  const w=src.map(v=>{ const st=store.v[v.b]; return 1+(st?Math.min(st.w,5)*2:0); });
+  const tot=w.reduce((a,b)=>a+b,0);
+  let v=src[0];
+  for(let t=0;t<10;t++){
+    let r=Math.random()*tot;
+    for(let k=0;k<src.length;k++){ r-=w[k]; if(r<=0){ v=src[k]; break; } }
+    if(!state.cur||!state.cur.v||state.cur.v.b!==v.b||src.length<2) break;
+  }
+  return v;
+}
+function pickSentence(){
+  if(Math.random()<0.65){ const p=pick(PHRASES); return {en:p.en,pt:p.pt}; }
+  const v=pick(VERBS.filter(x=>x.b!=="give up")), i=Math.floor(Math.random()*3);
+  return {en:v.en[i],pt:v.ptS[i]};
+}
+function nextQ(){
+  const m=state.mode;
+  if(m==="dict"||m==="speak"){
+    let s=pickSentence(); if(state.cur&&state.cur.en===s.en) s=pickSentence();
+    state.cur={kind:m,en:s.en,pt:s.pt,done:false,result:null,typed:"",shown:false,fresh:m==="dict",heard:null,score:0,html:"",listening:false,err:""};
+    return;
+  }
+  if(m==="fix"||m==="fixw"){
+    let src=ERRORS;
+    if(state.ecat==="mine"){ const mine=ERRORS.filter(x=>store.e[x.id]&&store.e[x.id].w>store.e[x.id].c); if(mine.length) src=mine; }
+    else if(state.ecat!=="all") src=ERRORS.filter(x=>x.cat===state.ecat);
+    const w=src.map(x=>{ const s=store.e[x.id]; return 1+(s?Math.max(0,Math.min(s.w-s.c,4))*2:0)+(s?0:1); });
+    const tot=w.reduce((a,b)=>a+b,0); let it=src[0];
+    for(let t=0;t<10;t++){ let r=Math.random()*tot; for(let k=0;k<src.length;k++){ r-=w[k]; if(r<=0){ it=src[k]; break; } }
+      if(!state.cur||!state.cur.it||state.cur.it.id!==it.id||src.length<2) break; }
+    state.cur={kind:m,it,order:Math.random()<.5?[0,1]:[1,0],done:false,result:null,typed:"",shown:false};
+    return;
+  }
+  const v=pickVerb();
+  const i=m==="past"?1:Math.floor(Math.random()*3);
+  const order=[0,1,2].sort(()=>Math.random()-.5);
+  state.cur={kind:m,v,i,order,done:false,result:null,typed:""};
+}
+function grade(ok){
+  const c=state.cur;
+  if(c.it){ const s=store.e[c.it.id]||(store.e[c.it.id]={c:0,w:0}); if(ok) s.c++; else s.w++; }
+  if(c.v){ const st=vs(c.v.b); if(ok){st.s++;st.c++;} else {st.s=0;st.w++;} }
+  const L=dayLog(); L.a++; L.train=(L.train||0)+1; if(ok) L.ok=(L.ok||0)+1;
+  c.done=true; c.result=ok; save();
+}
+/* compara a frase certa com o que foi escrito/falado, palavra por palavra */
+const NUMW="zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".split(" ");
+const CONTR=[["i'm","i am"],["you're","you are"],["we're","we are"],["they're","they are"],["it's","it is"],["that's","that is"],["what's","what is"],["he's","he is"],["she's","she is"],["don't","do not"],["doesn't","does not"],["didn't","did not"],["won't","will not"],["can't","can not"],["cannot","can not"],["i'll","i will"],["you'll","you will"],["we'll","we will"],["let's","let us"],["i've","i have"],["isn't","is not"],["aren't","are not"],["wasn't","was not"]];
+function canon(s){
+  let t=" "+String(s).toLowerCase().replace(/[’‘]/g,"'").replace(/\d+/g,m=>NUMW[+m]||m).replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ")+" ";
+  CONTR.forEach(([a,b])=>{ t=t.split(" "+a+" ").join(" "+b+" "); });
+  return t.replace(/'/g,"").replace(/\s+/g," ").trim();
+}
+function diff(target,got){
+  const have={}; canon(got).split(" ").forEach(w=>{ if(w) have[w]=(have[w]||0)+1; });
+  const toks=target.split(" "); let hit=0;
+  const html=toks.map(tok=>{
+    const ws=canon(tok).split(" ").filter(Boolean);
+    const ok=ws.length>0&&ws.every(w=>have[w]>0);
+    if(ok){ ws.forEach(w=>have[w]--); hit++; }
+    return ok||!ws.length?esc(tok):`<span class="miss">${esc(tok)}</span>`;
+  }).join(" ");
+  return {html,score:toks.length?hit/toks.length:0};
+}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+function startMic(){
+  const c=state.cur; if(!SR||!c||c.listening) return;
+  if(synth) synth.cancel();
+  let rec; try{ rec=new SR(); }catch(e){ c.err="Não deu pra abrir o microfone neste navegador."; render(); return; }
+  rec.lang="en-US"; rec.interimResults=false; rec.maxAlternatives=3;
+  c.listening=true; c.err=""; render();
+  rec.onresult=e=>{
+    const alts=e.results[0]; let best=null;
+    for(let k=0;k<alts.length;k++){ const m=diff(c.en,alts[k].transcript); if(!best||m.score>best.score) best={...m,t:alts[k].transcript}; }
+    if(!best) return;
+    c.heard=best.t; c.score=best.score; c.html=best.html;
+    if(!c.done) grade(best.score>=0.8);
+  };
+  rec.onerror=e=>{
+    c.err=(e.error==="not-allowed"||e.error==="service-not-allowed")?"O microfone está bloqueado. Libere o microfone pra este site nas configurações do navegador."
+      :e.error==="no-speech"?"Não ouvi nada. Toque em Falar e fale perto do celular.":"Não deu pra ouvir direito. Tente de novo.";
+  };
+  rec.onend=()=>{ c.listening=false; if(state.cur===c&&state.tab==="train") render(); };
+  try{ rec.start(); }catch(e){ c.listening=false; render(); }
+}
+const MODES=[["past","Qual é o passado?"],["tense","Qual é o tempo?"],["write","Escreva em inglês"],["dict","Ditado"],["speak","Fale em voz alta"],["fix","Qual está certa?"],["fixw","Corrija a frase"]];
+function renderTrain(){
+  if(!state.cur||state.cur.kind!==state.mode) nextQ();
+  const c=state.cur, v=c.v;
+  const modes=`<div class="controls">${MODES.map(([k,t])=>`<button class="chip" aria-pressed="${state.mode===k}" data-mode="${k}">${t}</button>`).join("")}</div>`;
+  let body="", hint="Um verbo fica dominado depois de 3 acertos seguidos. Os que você mais erra aparecem mais vezes.";
+  if(c.kind==="past"){
+    body=`<p class="q-label">Escreva o passado de:</p>
+      <p class="q-main">${esc(v.b)}</p><p class="hint">${esc(v.pt)}</p>
+      <input class="answer ${c.done?(c.result?"ok":"bad"):""}" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Digite aqui" value="${esc(c.typed)}" ${c.done?"disabled":""}>
+      ${c.done?feedback(c.result,`<p><b>${esc(v.b)} → ${esc(v.pa)}</b> ${sayBtn(v.pa)}</p><p>${enHTML(v,1)}</p><p class="hint" style="margin:0">${esc(v.ptS[1])}</p>`)
+        :`<div class="btns"><button class="btn" data-act="check">Conferir</button><button class="btn ghost" data-act="skip">Não sei</button></div>`}`;
+  } else if(c.kind==="tense"){
+    body=`<p class="q-label">Qual frase em inglês é a tradução?</p>
+      <p class="q-pt">${esc(v.ptS[c.i])}</p>
+      <div class="opts">${c.order.map(k=>{
+        let cls=""; if(c.done){ if(k===c.i) cls="right"; else if(k===c.chosen) cls="wrong"; }
+        return `<button class="opt ${cls}" data-opt="${k}" ${c.done?"disabled":""}>${esc(v.en[k])}</button>`;}).join("")}</div>
+      ${c.done?feedback(c.result,`<p>${v.b==="give up"?`A chave está no verbo: <b>${esc(v.hv[c.i])}</b>.`:`A palavra <b>${TIME_PT[c.i]}</b> pede o <b>${TNAME[c.i].toLowerCase()}</b>: <b>${esc(v.hv[c.i])}</b>.`}</p><p>${enHTML(v,c.i)} ${sayBtn(v.en[c.i])}</p>`):""}`;
+  } else if(c.kind==="write"){
+    body=`<p class="q-label">Escreva em inglês:</p>
+      <p class="q-pt">${esc(v.ptS[c.i])}</p>
+      <input class="answer ${c.done?(c.result?"ok":"bad"):""}" id="ans" autocomplete="off" spellcheck="false" placeholder="Escreva a frase em inglês" value="${esc(c.typed)}" ${c.done?"disabled":""}>
+      ${c.shown&&!c.done?`<div class="fb"><p>Resposta: <b>${enHTML(v,c.i)}</b> ${sayBtn(v.en[c.i])}</p><p class="hint" style="margin:0">Compare com o que você escreveu. Acertou o verbo e o tempo?</p>
+        <div class="btns"><button class="btn okb" data-act="self-ok">Acertei</button><button class="btn badb" data-act="self-bad">Errei</button></div></div>`:""}
+      ${c.done?feedback(c.result,`<p>${enHTML(v,c.i)} ${sayBtn(v.en[c.i])}</p>`)
+        :(c.shown?"":`<div class="btns"><button class="btn" data-act="reveal">Ver resposta</button></div>`)}`;
+  } else if(c.kind==="fix"){
+    const it=c.it, opts=[it.bad,it.good[0]];
+    hint="Uma frase é como a gente fala traduzindo do português. A outra é o inglês certo. Os que você erra voltam mais vezes.";
+    body=`<p class="q-label">Qual está certa?</p>
+      <div class="opts">${c.order.map(k=>{ let cls=""; if(c.done){ if(k===1) cls="right"; else if(k===c.chosen) cls="wrong"; }
+        return `<button class="opt ${cls}" data-eopt="${k}" ${c.done?"disabled":""}>${esc(opts[k])}</button>`; }).join("")}</div>
+      ${c.done?feedback(c.result,errExplain(it)):""}`;
+  } else if(c.kind==="fixw"){
+    const it=c.it;
+    hint="Essa frase tem um erro de brasileiro. Escreva do jeito certo. Pontuação e maiúscula não contam.";
+    body=`<p class="q-label">Corrija a frase:</p>
+      <p class="q-pt"><s style="text-decoration-color:var(--bad)">${esc(it.bad)}</s></p>
+      <input class="answer ${c.done?(c.result?"ok":"bad"):""}" id="ans" autocomplete="off" spellcheck="false" placeholder="Escreva a frase certa" value="${esc(c.typed)}" ${c.done||c.shown?"disabled":""}>
+      ${c.shown&&!c.done?`<div class="fb">${errExplain(it)}<p class="hint" style="margin:8px 0 0">Compare com o que você escreveu. Acertou a correção?</p>
+        <div class="btns"><button class="btn okb" data-act="self-ok">Acertei</button><button class="btn badb" data-act="self-bad">Errei</button></div></div>`:""}
+      ${c.done?feedback(c.result,errExplain(it)):(c.shown?"":`<div class="btns"><button class="btn" data-act="fcheck">Conferir</button><button class="btn ghost" data-act="dskip">Não sei</button></div>`)}`;
+  } else if(c.kind==="dict"){
+    hint="Ouça a frase e escreva o que entendeu. Use o 🐢 pra ouvir devagar. Pontuação e letra maiúscula não contam.";
+    body=`<p class="q-label">Ouça e escreva a frase:</p>
+      <div class="btns"><button class="btn" data-say="${esc(c.en)}">🔊 Ouvir</button><button class="btn ghost" data-slow="${esc(c.en)}">🐢 Devagar</button></div>
+      <input class="answer ${c.done?(c.result?"ok":"bad"):""}" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Escreva o que ouviu" value="${esc(c.typed)}" ${c.done||c.shown?"disabled":""}>
+      ${c.shown&&!c.done?`<div class="fb"><p>Resposta: <b>${diff(c.en,c.typed).html}</b> ${sayBtn(c.en)}</p><p class="hint" style="margin:0">${esc(c.pt)}</p>
+        <p class="hint" style="margin:8px 0 0">As palavras marcadas faltaram ou ficaram diferentes. Foi só um detalhe?</p>
+        <div class="btns"><button class="btn okb" data-act="self-ok">Acertei</button><button class="btn badb" data-act="self-bad">Errei</button></div></div>`:""}
+      ${c.done?feedback(c.result,`<p><b>${esc(c.en)}</b> ${sayBtn(c.en)}</p><p class="hint" style="margin:0">${esc(c.pt)}</p>`)
+        :(c.shown?"":`<div class="btns"><button class="btn" data-act="dcheck">Conferir</button><button class="btn ghost" data-act="dskip">Não sei</button></div>`)}`;
+  } else {
+    hint="Leia a frase em voz alta. O app escuta e marca as palavras que não entendeu. 80% ou mais conta como acerto.";
+    if(!SR){
+      body=`<p class="q-label">Fale em voz alta</p><p>Este navegador não reconhece voz. No celular, abra o app no Google Chrome (Android) ou no Safari atualizado (iPhone).</p>
+        <p class="q-main sm">${esc(c.en)}</p><div class="btns"><button class="btn ghost" data-say="${esc(c.en)}">🔊 Ouvir</button><button class="btn" data-act="next">Próximo</button></div>`;
+    } else {
+      body=`<p class="q-label">Leia em voz alta:</p>
+        <p class="q-main sm">${c.heard!==null?c.html:esc(c.en)}</p>
+        <p class="hint">${esc(c.pt)}</p>
+        <div class="btns"><button class="btn ghost" data-say="${esc(c.en)}">🔊 Ouvir antes</button>
+          <button class="btn mic ${c.listening?"on":""}" data-act="mic">${c.listening?"🎤 Ouvindo… fale agora":c.heard!==null?"🎤 Tentar de novo":"🎤 Falar"}</button></div>
+        ${c.err?`<p class="hint" style="color:var(--bad);margin-top:10px">${esc(c.err)}</p>`:""}
+        ${c.heard!==null?`<div class="fb ${c.score>=0.8?"ok":"bad"}"><p><b>${c.score>=0.8?"Boa pronúncia!":"Quase. Tente de novo."}</b> ${Math.round(c.score*100)}% das palavras entendidas.</p>
+          <p class="hint" style="margin:0">O app ouviu: “${esc(c.heard)}”</p>
+          <div class="btns"><button class="btn" data-act="next">Próximo</button></div></div>`:""}`;
+    }
+  }
+  const m=VERBS.filter(x=>isMastered(x.b)).length, verbMode=["past","tense","write"].includes(c.kind);
+  view.innerHTML=`<h2>Treino</h2>
+    <p class="hint">${hint}</p>
+    ${modes}<div class="card">${body}</div>
+    ${verbMode?`<div class="progress">${m} de ${VERBS.length} verbos dominados<div class="bar"><i style="width:${(m/VERBS.length*100).toFixed(1)}%"></i></div></div>`
+      :`<div class="progress">${dayLog().train||0} exercícios feitos hoje</div>`}`;
+  const a=document.getElementById("ans"); if(a&&!c.done&&!c.shown) a.focus({preventScroll:true});
+  if(c.kind==="dict"&&c.fresh){ c.fresh=false; setTimeout(()=>{ if(state.cur===c) speak(c.en); },300); }
+}
+function errExplain(it){
+  return `<p><b>${it.good.map(esc).join(" <span class='small'>ou</span> ")}</b> ${sayBtn(it.good[0])}</p><p class="hint" style="margin:0">${esc(it.why)}</p>`;
+}
+function feedback(ok,inner){
+  return `<div class="fb ${ok?"ok":"bad"}"><p><b>${ok?"Certo!":"Ainda não."}</b></p>${inner}
+    <div class="btns"><button class="btn" data-act="next">Próximo</button></div></div>`;
+}
+
+/* texts */
+function renderTexts(){
+  const T=TEXTS[state.text], i=state.tense; // 0 pres,1 past,2 fut
+  const cls=SENT_CLASS[i];
+  const parts=T.v[i].split(/(\[[^\]]+\])/);
+  const html=parts.map(p=>{
+    if(p.startsWith("[")){ const w=p.slice(1,-1); return `<span class="w vb" data-say="${esc(w)}">${esc(w)}</span>`; }
+    return p.split(/([A-Za-z']+)/).map(t=>/^[A-Za-z']+$/.test(t)?`<span class="w" data-say="${esc(t)}">${esc(t)}</span>`:esc(t)).join("");
+  }).join("");
+  const plain=T.v[i].replace(/[\[\]]/g,"");
+  view.innerHTML=`<h2>Textos pra ler em voz alta</h2>
+    <p class="hint">Leia em voz alta, depois ouça e compare. Toque em qualquer palavra pra ouvir só ela. Os verbos estão destacados.</p>
+    <div class="controls">${TEXTS.map((t,k)=>`<button class="chip" aria-pressed="${k===state.text}" data-text="${k}">${esc(t.title)}</button>`).join("")}</div>
+    <div class="controls">
+      <button class="chip t0" aria-pressed="${i===1}" data-tense="1">Passado</button>
+      <button class="chip t1" aria-pressed="${i===0}" data-tense="0">Presente</button>
+      <button class="chip t2" aria-pressed="${i===2}" data-tense="2">Futuro</button>
+    </div>
+    <article class="reader ${cls}">
+      <h3>${esc(T.title)}</h3>
+      <p class="ttext">${html}</p>
+      <div class="listenbar">
+        <button class="btn" data-say="${esc(plain)}" data-count="texts">🔊 Ouvir o texto</button>
+        <button class="btn ghost" data-act="stop">Parar</button>
+        <button class="btn ghost" data-act="pt">${state.showPT?"Esconder tradução":"Mostrar tradução"}</button>
+      </div>
+      ${state.showPT?`<p class="trans">${esc(T.pt[i])}</p>`:""}
+    </article>`;
+}
+
+/* rules */
+function renderRules(){
+  view.innerHTML=`<h2>Regras pra decorar</h2>
+  <p class="hint">As regras dos erros que mais aparecem. Leia os exemplos certos em voz alta.</p>
+  <div class="rules">${RULES.map(r=>`<section class="rule"><h3>${esc(r.t)}</h3><p>${esc(r.p)}</p>
+    ${r.ex?r.ex.map(([k,t])=>`<div class="ex ${k}"><span class="mk" aria-label="${k==="yes"?"Certo":"Errado"}">${k==="yes"?"✓":"✕"}</span><span class="t">${esc(t)}</span>${k==="yes"?sayBtn(t):""}</div>`).join(""):""}
+    ${r.table?`<div class="scroll"><table class="tbl"><tbody>${r.table.map(([a,b])=>`<tr><th scope="row">${esc(a)}</th><td>${esc(b)}</td></tr>`).join("")}</tbody></table></div>`:""}
+  </section>`).join("")}</div>`;
+}
+
+/* home */
+const num=(b,s)=>`<div class="num"><b>${b}</b><span>${s}</span></div>`;
+function renderHome(){
+  const L=dayLog(), s=streak(), goal=store.goal, pct=Math.min(1,(L.sec||0)/(goal*60));
+  const doneToday=dayDone(today());
+  const days=[...Array(7)].map((_,k)=>addDays(today(),k-6));
+  const secs=days.map(d=>(store.log[d]||{}).sec||0);
+  const mx=Math.max(goal*60,...secs);
+  const WD=["D","S","T","Q","Q","S","S"];
+  let total=0,trained=0; for(const d in store.log){ total+=store.log[d].sec||0; if(dayDone(d)) trained++; }
+  const due=dueCount(), m=VERBS.filter(v=>isMastered(v.b)).length;
+  view.innerHTML=`
+  <div class="hero"><div class="flame">🔥 ${s}</div><div><div class="lbl">${s===1?"dia seguido":"dias seguidos"}</div>
+    <p class="msg">${doneToday?"Hoje já contou. Volta amanhã pra manter.":s?"Treine hoje pra não perder a sequência.":"Faça qualquer atividade hoje pra começar a sequência."}</p></div></div>
+  <div class="section"><h3 class="sh">Meta de hoje</h3>
+    <div class="goalbar ${pct>=1?"full":""}"><i style="width:${(pct*100).toFixed(1)}%"></i></div>
+    <p class="small" style="margin:0 0 10px">${fmtMin(L.sec)} de ${goal} min${pct>=1?" · meta batida ✓":""}</p>
+    <div class="controls" style="margin:0">${[5,10,15,20,30].map(g=>`<button class="chip" aria-pressed="${goal===g}" data-goal="${g}">${g} min</button>`).join("")}</div>
+  </div>
+  <div class="section"><h3 class="sh">Hoje</h3><div class="nums">
+    ${num(fmtMin(L.sec),"estudados")}${num(L.a||0,"atividades")}${num(L.ok||0,"acertos")}${num(L.cards||0,"cards revisados")}
+  </div></div>
+  <div class="section"><h3 class="sh">Últimos 7 dias</h3>
+    <div class="week">${days.map((d,k)=>{ const sc=secs[k]; const h=sc?Math.max(6,sc/mx*100):3;
+      const cls=sc>=goal*60?"met":sc>0?"some":""; const wd=WD[new Date(d+"T12:00:00").getDay()];
+      return `<div class="wk ${k===6?"today":""}"><em>${sc>=60?Math.floor(sc/60):""}</em><div class="barbox"><i class="${cls}" style="height:${h}%"></i></div><small>${wd}</small></div>`; }).join("")}</div>
+    <p class="small">Número em cima = minutos. Verde = meta batida.</p></div>
+  <div class="section"><h3 class="sh">Treinar agora</h3><div class="quick">
+    <button class="qa t1" data-goto="cards">Flashcards<span>${due?due+" pra revisar hoje":"Cards novos esperando"}</span></button>
+    <button class="qa t0" data-goto="train:past">Verbos<span>${m} de ${VERBS.length} dominados</span></button>
+    <button class="qa t2" data-goto="train:dict">Ditado<span>Ouça e escreva</span></button>
+    <button class="qa t3" data-goto="train:speak">Pronúncia<span>Fale e o app confere</span></button>
+    <button class="qa t0" data-goto="train:fix">Erros comuns<span>Carro branco = white car</span></button>
+  </div></div>
+  <div class="section"><h3 class="sh">Desde o começo</h3><div class="nums">
+    ${num(fmtMin(total),"no total")}${num(trained,"dias treinados")}${num(bestStreak(),"melhor sequência")}${num(learnedCount(),"cards aprendidos")}
+  </div></div>
+  <div class="section"><h3 class="sh">Backup</h3>
+    <p class="small" style="margin:0 0 10px">O progresso fica salvo neste celular, neste navegador. Salve um backup antes de trocar de aparelho ou limpar o navegador.</p>
+    <div class="backup"><button class="btn ghost" data-act="export">Salvar backup</button><button class="btn ghost" data-act="import">Restaurar backup</button>
+    <input type="file" id="importFile" accept="application/json,.json" hidden></div></div>`;
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(store)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`english-gym-backup-${today()}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+function importData(file){
+  if(!file) return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!d||typeof d!=="object"||(!d.v&&!d.log)) throw 0;
+      Object.keys(store).forEach(k=>delete store[k]); Object.assign(store,fix(d)); save(); render();
+      alert("Backup restaurado.");
+    }catch(e){ alert("Esse arquivo não é um backup do English Gym."); }
+  };
+  r.readAsText(file);
+}
+
+/* flashcards */
+const DECKS=[["phrases","Frases"],["words","Palavras"],["verbs","Verbos"]];
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+function cardItems(deck){
+  if(deck==="verbs") return VERBS.map(v=>({id:"v:"+v.b,en:v.b,pt:v.pt,verb:v,say:`${v.pres}. ${v.pa}. will ${v.b}.`,cat:v.reg?"Regulares":"Irregulares"}));
+  if(deck==="words") return WORDS.map(w=>({id:"w:"+w.en,en:w.en,pt:w.pt,say:w.en,cat:w.cat}));
+  return PHRASES.map(p=>({id:"p:"+p.en,en:p.en,pt:p.pt,say:p.en,cat:p.cat}));
+}
+function deckFiltered(){ const f=state.fc; let it=cardItems(f.deck); if(f.cat!=="all") it=it.filter(x=>x.cat===f.cat); return it; }
+function buildQueue(force){
+  const f=state.fc, items=deckFiltered(), t=today();
+  let q;
+  if(force) q=shuffle(items).slice(0,15);
+  else{
+    const due=shuffle(items.filter(x=>store.cards[x.id]&&store.cards[x.id].d<=t)).slice(0,20);
+    const fresh=shuffle(items.filter(x=>!store.cards[x.id])).slice(0,Math.max(0,Math.min(10,20-due.length)));
+    q=due.concat(fresh);
+  }
+  Object.assign(f,{queue:q,idx:0,flip:false,right:0,wrong:0,retry:{}});
+}
+function answerCard(ok){
+  const f=state.fc, it=f.queue[f.idx]; if(!it) return;
+  const s=store.cards[it.id]||{b:0,d:today()};
+  if(ok){ s.b=f.retry[it.id]?1:Math.min(s.b+1,5); s.d=addDays(today(),BOX_DAYS[s.b]); f.right++; }
+  else { s.b=0; s.d=today(); f.wrong++; if(!f.retry[it.id]){ f.retry[it.id]=1; f.queue.push(it); } }
+  store.cards[it.id]=s;
+  const L=dayLog(); L.a++; L.cards=(L.cards||0)+1; if(ok) L.ok=(L.ok||0)+1;
+  save(); f.idx++; f.flip=false;
+}
+function renderCards(){
+  const f=state.fc; if(!f.queue) buildQueue(false);
+  const items=deckFiltered(), t=today();
+  const nDue=items.filter(x=>store.cards[x.id]&&store.cards[x.id].d<=t).length;
+  const nNew=items.filter(x=>!store.cards[x.id]).length;
+  const nLearn=items.filter(x=>store.cards[x.id]&&store.cards[x.id].b>=3).length;
+  const cats=[...new Set(cardItems(f.deck).map(x=>x.cat))];
+  let body;
+  if(f.idx>=f.queue.length){
+    body=`<div class="card"><p class="q-main sm">${f.queue.length?"Rodada concluída 💪":"Nada pra revisar agora neste baralho."}</p>
+      ${f.queue.length?`<p>${f.right} acertos e ${f.wrong} erros. Os que você errou voltam amanhã; os que acertou voltam em alguns dias.</p>`:`<p class="hint">Os cards que você já acertou voltam nos próximos dias. Pode treinar mais agora se quiser.</p>`}
+      <div class="btns">${nDue||nNew?`<button class="btn" data-act="cagain">Próxima rodada</button>`:""}<button class="btn ${nDue||nNew?"ghost":""}" data-act="cmore">Mais 15 cards aleatórios</button></div></div>`;
+  } else {
+    const it=f.queue[f.idx], ptFirst=f.dir==="pt", isNew=!store.cards[it.id];
+    const front=ptFirst?it.pt:it.en, v=it.verb;
+    const forms=v?`<div class="forms"><span class="c1"><small>presente</small>${esc(v.pres)}</span><span class="c2"><small>passado</small>${esc(v.pa)}</span><span class="c3"><small>futuro</small>will ${esc(v.b)}</span></div>`:"";
+    body=`<div class="fc" data-act="flip" role="button" tabindex="0" aria-label="Virar card">
+        <p class="q-label">${f.idx+1} de ${f.queue.length}${isNew?' <span class="tag">novo</span>':""}${f.retry[it.id]&&!isNew?' <span class="tag">de novo</span>':""}</p>
+        <p class="fc-front">${esc(front)}</p>
+        ${!ptFirst&&!f.flip?`<div>${sayBtn(it.say)}</div>`:""}
+        ${f.flip?`<div class="fc-back"><p class="fc-en"><span>${esc(it.en)}</span>${sayBtn(it.say)}</p>${forms}<p class="ptx" style="margin:0">${esc(it.pt)}</p></div>`
+          :`<p class="hint" style="margin-top:auto">Tente lembrar e toque pra virar</p>`}
+      </div>
+      <div class="btns" style="margin-top:12px">${f.flip
+        ?`<button class="btn badb" data-act="cwrong">Errei</button><button class="btn okb" data-act="cright">Acertei</button>`
+        :`<button class="btn" data-act="flip">Virar</button>`}</div>`;
+  }
+  view.innerHTML=`<h2>Flashcards</h2>
+    <p class="hint">Tente lembrar antes de virar. O que você erra volta logo; o que acerta volta em alguns dias.</p>
+    <div class="controls">${DECKS.map(([k,n])=>`<button class="chip" aria-pressed="${f.deck===k}" data-deck="${k}">${n}</button>`).join("")}
+      <span style="flex:1"></span>
+      <button class="chip" aria-pressed="${f.dir==="pt"}" data-dir="pt">PT → EN</button><button class="chip" aria-pressed="${f.dir==="en"}" data-dir="en">EN → PT</button></div>
+    <div class="controls"><button class="chip" aria-pressed="${f.cat==="all"}" data-fccat="all">Todas</button>${cats.map(c=>`<button class="chip" aria-pressed="${f.cat===c}" data-fccat="${esc(c)}">${esc(c)}</button>`).join("")}</div>
+    <p class="deckinfo">${nDue} pra revisar · ${nNew} novos · ${nLearn} aprendidos de ${items.length}</p>
+    ${body}`;
+}
+
+/* erros comuns */
+function renderErrors(){
+  const mine=ERRORS.filter(x=>store.e[x.id]&&store.e[x.id].w>store.e[x.id].c);
+  const list=state.ecat==="mine"?mine:ERRORS.filter(x=>state.ecat==="all"||x.cat===state.ecat);
+  let lastCat="";
+  view.innerHTML=`<h2>Erros comuns de brasileiro</h2>
+    <p class="hint">Frases que a gente entende, mas que saem erradas porque traduzimos do português. Leia a certa em voz alta.</p>
+    <div class="controls"><button class="chip" aria-pressed="${state.ecat==="all"}" data-ecat="all">Todos</button>
+      ${ERROR_CATS.map(c=>`<button class="chip" aria-pressed="${state.ecat===c}" data-ecat="${esc(c)}">${esc(c)}</button>`).join("")}
+      <button class="chip t0" aria-pressed="${state.ecat==="mine"}" data-ecat="mine">Os que eu erro (${mine.length})</button></div>
+    <div class="btns" style="margin:0 0 14px"><button class="btn" data-goto="train:fix">Treinar: qual está certa?</button><button class="btn ghost" data-goto="train:fixw">Treinar: corrija a frase</button></div>
+    ${list.length?`<div class="rules">${list.map(it=>{
+      const h=(state.ecat==="all"&&it.cat!==lastCat)?`<h3 class="cat-h">${esc(it.cat)}</h3>`:""; lastCat=it.cat;
+      const s=store.e[it.id];
+      return `${h}<section class="rule">
+        <div class="ex no"><span class="mk" aria-label="Errado">✕</span><span class="t">${esc(it.bad)}</span></div>
+        ${it.good.map(g=>`<div class="ex yes"><span class="mk" aria-label="Certo">✓</span><span class="t">${esc(g)}</span>${sayBtn(g)}</div>`).join("")}
+        <p style="margin:8px 0 0">${esc(it.why)}${s?` <span class="small">(${s.c} acertos, ${s.w} erros)</span>`:""}</p></section>`;
+    }).join("")}</div>`:`<div class="empty">${state.ecat==="mine"?"Nenhum erro marcado ainda. Faça o treino e os que você errar aparecem aqui.":"Nada aqui."}</div>`}`;
+}
+
+/* frases */
+function filteredPhrases(){ const q=norm(state.pq); return PHRASES.filter(p=>(state.pcat==="all"||p.cat===state.pcat)&&(!q||norm(p.en+" "+p.pt).includes(q))); }
+function renderPhrases(){
+  const list=filteredPhrases(); let lastCat="";
+  view.innerHTML=`<h2>Frases do dia a dia</h2>
+    <p class="hint">Frases prontas pra contar o seu dia. Ouça, repita em voz alta e depois treine nos Flashcards. Na categoria Manhã elas estão na ordem do dia.</p>
+    <div class="controls"><input class="search" type="search" placeholder="Buscar em inglês ou português" value="${esc(state.pq)}" data-search="pq" aria-label="Buscar frase"></div>
+    <div class="controls"><button class="chip" aria-pressed="${state.pcat==="all"}" data-pcat="all">Todas</button>${PHRASE_CATS.map(c=>`<button class="chip" aria-pressed="${state.pcat===c}" data-pcat="${esc(c)}">${esc(c)}</button>`).join("")}</div>
+    <div class="listenbar" style="margin:0 0 14px"><button class="btn" data-act="seq">▶ Ouvir em sequência</button><button class="btn ghost" data-act="stop">Parar</button></div>
+    <div class="phr-list">${list.length?list.map((p,i)=>{
+      const h=(state.pcat==="all"&&p.cat!==lastCat)?`<h3 class="cat-h">${esc(p.cat)}</h3>`:""; lastCat=p.cat;
+      return `${h}<div class="phr" data-i="${i}"><div style="flex:1"><div class="en">${esc(p.en)}</div><div class="ptx">${esc(p.pt)}</div></div>${sayBtn(p.en)}</div>`;
+    }).join(""):`<div class="empty">Nenhuma frase encontrada. Tente outra palavra.</div>`}</div>`;
+}
+function stopSeq(){ state.seqId++; document.querySelectorAll(".phr.speaking").forEach(x=>x.classList.remove("speaking")); }
+function playSeq(){
+  const list=filteredPhrases(); if(!list.length) return;
+  const id=++state.seqId; let k=0; countAct("phrases");
+  const step=()=>{
+    document.querySelectorAll(".phr.speaking").forEach(x=>x.classList.remove("speaking"));
+    if(id!==state.seqId||state.tab!=="phrases"||k>=list.length) return;
+    const row=view.querySelector(`.phr[data-i="${k}"]`); if(row){ row.classList.add("speaking"); row.scrollIntoView({block:"nearest",behavior:"smooth"}); }
+    speak(list[k].en,()=>{ if(id!==state.seqId) return; k++; setTimeout(step,700); });
+  };
+  step();
+}
+
+/* palavras */
+function renderWords(){
+  const q=norm(state.wq);
+  const list=WORDS.filter(w=>(state.wcat==="all"||w.cat===state.wcat)&&(!q||norm(w.en+" "+w.pt).includes(q)));
+  let lastCat="";
+  view.innerHTML=`<h2>Palavras</h2>
+    <p class="hint">Toque numa palavra pra ouvir. Esconda o português e tente lembrar antes de tocar.</p>
+    <div class="controls"><input class="search" type="search" placeholder="Buscar em inglês ou português" value="${esc(state.wq)}" data-search="wq" aria-label="Buscar palavra">
+      <button class="chip t0" aria-pressed="${state.whide}" data-act="whide">${state.whide?"Mostrar português":"Esconder português"}</button></div>
+    <div class="controls"><button class="chip" aria-pressed="${state.wcat==="all"}" data-wcat="all">Todas</button>${WORD_CATS.map(c=>`<button class="chip" aria-pressed="${state.wcat===c}" data-wcat="${esc(c)}">${esc(c)}</button>`).join("")}</div>
+    ${list.length?"":`<div class="empty">Nenhuma palavra encontrada. Tente outra.</div>`}
+    ${list.map(w=>{
+      let h=""; if(w.cat!==lastCat){ h=(lastCat?"</div>":"")+(state.wcat==="all"?`<h3 class="cat-h">${esc(w.cat)}</h3>`:"")+`<div class="wgrid">`; lastCat=w.cat; }
+      const masked=state.whide&&!state.wrev.has(w.en);
+      return `${h}<button class="wd" data-word="${esc(w.en)}"><b>${esc(w.en)}</b><span>${masked?'<span class="masked"></span>':esc(w.pt)}</span></button>`;
+    }).join("")}${list.length?"</div>":""}`;
+}
+
+/* tempo ativo: conta só com o app aberto e em uso (sem mexer por 90s, para de contar) */
+let lastAct=Date.now(), tick=0;
+["pointerdown","keydown","input","scroll","touchstart"].forEach(ev=>window.addEventListener(ev,()=>{ lastAct=Date.now(); },{passive:true,capture:true}));
+setInterval(()=>{
+  if(document.visibilityState!=="visible") return;
+  if(synth&&synth.speaking) lastAct=Date.now();
+  if(Date.now()-lastAct>90000) return;
+  dayLog().sec+=5; tick++;
+  if(tick%6===0){ save(); renderStats(); }
+},5000);
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") save(); });
+
+/* ---------- EVENTS ---------- */
+function goTab(t){ state.tab=t; stopSeq(); if(synth) synth.cancel(); render(); window.scrollTo({top:0}); }
+document.addEventListener("click",e=>{
+  const el=e.target.closest("button,[data-say],[data-act]");
+  if(!el||el.tagName==="INPUT") return;
+  const d=el.dataset;
+  if(d.say){
+    stopSeq();
+    if(el.classList.contains("w")){
+      document.querySelectorAll(".w.speaking").forEach(x=>x.classList.remove("speaking"));
+      el.classList.add("speaking"); speak(d.say,()=>el.classList.remove("speaking"));
+    } else speak(d.say);
+    if(d.count) countAct(d.count);
+    return;
+  }
+  if(d.slow){ const r=store.rate; store.rate=0.6; speak(d.slow); store.rate=r; return; }
+  if(d.word){ speak(d.word); if(state.whide&&!state.wrev.has(d.word)){ state.wrev.add(d.word); render(); } return; }
+  if(d.tab){ goTab(d.tab); return; }
+  if(d.goto){ const [t,m]=d.goto.split(":"); if(m){ state.mode=m; state.cur=null; } goTab(t); return; }
+  if(d.filter){ state.filter=d.filter; render(); return; }
+  if(d.open!==undefined){ state.open=state.open===d.open?null:d.open; render(); return; }
+  if(d.mode){ state.mode=d.mode; state.cur=null; if(synth) synth.cancel(); render(); return; }
+  if(d.text){ state.text=+d.text; render(); return; }
+  if(d.tense){ state.tense=+d.tense; render(); return; }
+  if(d.deck){ state.fc.deck=d.deck; state.fc.cat="all"; state.fc.queue=null; render(); return; }
+  if(d.fccat){ state.fc.cat=d.fccat; state.fc.queue=null; render(); return; }
+  if(d.dir){ state.fc.dir=d.dir; state.fc.flip=false; render(); return; }
+  if(d.pcat){ state.pcat=d.pcat; stopSeq(); if(synth) synth.cancel(); render(); return; }
+  if(d.ecat){ state.ecat=d.ecat; if(state.cur&&(state.cur.kind==="fix"||state.cur.kind==="fixw")) state.cur=null; render(); return; }
+  if(d.eopt!==undefined){ const c=state.cur; if(!c||c.done) return; c.chosen=+d.eopt; grade(c.chosen===1); render(); return; }
+  if(d.wcat){ state.wcat=d.wcat; render(); return; }
+  if(d.goal){ store.goal=+d.goal; save(); render(); return; }
+  if(d.opt!==undefined){ const c=state.cur; if(c.done) return; c.chosen=+d.opt; grade(c.chosen===c.i); render(); return; }
+  const c=state.cur, f=state.fc;
+  switch(d.act){
+    case "speed": store.rate=store.rate<1?1:0.75; save(); renderStats(); break;
+    case "hide": state.hide=!state.hide; render(); break;
+    case "stop": stopSeq(); if(synth) synth.cancel(); break;
+    case "pt": state.showPT=!state.showPT; render(); break;
+    case "check": { const a=document.getElementById("ans"); c.typed=a.value; if(!norm(c.typed)){a.focus();return;} grade(norm(c.typed)===norm(c.v.pa)); render(); break; }
+    case "skip": c.typed=""; grade(false); render(); break;
+    case "reveal": { const a=document.getElementById("ans"); c.typed=a.value;
+      if(canon(c.typed)===canon(c.v.en[c.i])) grade(true); else c.shown=true; render(); break; }
+    case "dcheck": { const a=document.getElementById("ans"); c.typed=a.value; if(!canon(c.typed)){a.focus();return;}
+      if(canon(c.typed)===canon(c.en)) grade(true); else c.shown=true; render(); break; }
+    case "fcheck": { const a=document.getElementById("ans"); c.typed=a.value; if(!canon(c.typed)){a.focus();return;}
+      if(c.it.good.some(g=>canon(g)===canon(c.typed))) grade(true); else c.shown=true; render(); break; }
+    case "dskip": c.typed=""; grade(false); render(); break;
+    case "self-ok": grade(true); render(); break;
+    case "self-bad": grade(false); render(); break;
+    case "next": nextQ(); render(); break;
+    case "mic": startMic(); break;
+    case "flip": if(f.queue&&f.queue[f.idx]&&!f.flip){ f.flip=true; speak(f.queue[f.idx].say); render(); } break;
+    case "cright": answerCard(true); render(); break;
+    case "cwrong": answerCard(false); render(); break;
+    case "cmore": buildQueue(true); render(); break;
+    case "cagain": buildQueue(false); render(); break;
+    case "seq": playSeq(); break;
+    case "whide": state.whide=!state.whide; state.wrev=new Set(); render(); break;
+    case "export": exportData(); break;
+    case "import": document.getElementById("importFile").click(); break;
+  }
+});
+document.addEventListener("change",e=>{ if(e.target.id==="importFile") importData(e.target.files[0]); });
+document.addEventListener("input",e=>{
+  const key=e.target.dataset.search;
+  if(key){ state[key]=e.target.value; const pos=e.target.selectionStart; render(); const s=view.querySelector(`[data-search="${key}"]`); if(s){ s.focus(); s.setSelectionRange(pos,pos); } }
+  if(e.target.id==="ans"&&state.cur) state.cur.typed=e.target.value;
+});
+document.addEventListener("keydown",e=>{
+  if(state.tab==="cards"&&e.target.tagName!=="INPUT"){
+    const f=state.fc; if(!f.queue||!f.queue[f.idx]) return;
+    if(!f.flip&&(e.key===" "||e.key==="Enter")){ e.preventDefault(); f.flip=true; speak(f.queue[f.idx].say); render(); return; }
+    if(f.flip&&e.key==="1"){ answerCard(false); render(); return; }
+    if(f.flip&&e.key==="2"){ answerCard(true); render(); return; }
+    return;
+  }
+  if(e.key!=="Enter"||state.tab!=="train") return;
+  const c=state.cur; if(!c) return;
+  if(c.done){ e.preventDefault(); nextQ(); render(); return; }
+  if(e.target.id==="ans"){ e.preventDefault(); const b=view.querySelector('[data-act="check"],[data-act="reveal"],[data-act="dcheck"],[data-act="fcheck"]'); if(b) b.click(); }
+});
+
+render();
+if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+
+</body>
+</html>
