@@ -235,7 +235,7 @@ h3.sh{font-family:var(--display);font-weight:600;font-size:1.12rem;margin:0 0 10
 .pills{margin-left:auto;display:flex;gap:6px}
 .pill{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-weight:700;font-size:.9rem;white-space:nowrap}
 .pill.hot{border-color:color-mix(in srgb,var(--fut) 45%,var(--line));background:var(--fut-soft)}
-main{padding:16px 0 calc(96px + env(safe-area-inset-bottom,0px))}
+main.wrap{padding-top:16px;padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
 h2{font-size:1.6rem;margin:2px 0 4px;letter-spacing:-.01em}
 .bottomnav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);max-width:760px;margin:0 auto;background:color-mix(in srgb,var(--surface) 92%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
 @media (min-width:761px){.bottomnav{bottom:12px;border:1px solid var(--line);border-radius:20px;padding-bottom:6px;box-shadow:0 6px 24px rgba(0,0,0,.08)}}
@@ -281,6 +281,7 @@ h2{font-size:1.6rem;margin:2px 0 4px;letter-spacing:-.01em}
 @media (max-width:560px){.fc{min-height:38vh}}
 .dirbtn{margin-left:auto;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 10px;font-weight:700;font-size:.82rem;color:var(--ink)}
 .deckinfo{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nums.n3{grid-template-columns:repeat(3,1fr)}
 /* mais */
 .menu{display:flex;flex-direction:column;gap:8px}
 .mrow{display:flex;align-items:center;gap:14px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:14px 16px;width:100%}
@@ -1261,7 +1262,7 @@ function renderHome(){
     <button class="qa t3" data-goto="train:speak">Pronúncia<span>Fale e o app confere</span></button>
     <button class="qa t1" data-goto="phrases">Frases do dia<span>Ouça e repita</span></button>
   </div></div>
-  <div class="section"><h3 class="sh">Hoje</h3><div class="nums">
+  <div class="section"><h3 class="sh">Hoje</h3><div class="nums n3">
     ${num(L.a||0,"atividades")}${num(L.ok||0,"acertos")}${num(L.cards||0,"cards")}
   </div></div>
   <div class="section"><h3 class="sh">Últimos 7 dias</h3>
