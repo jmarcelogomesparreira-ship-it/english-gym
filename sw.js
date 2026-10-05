@@ -1,5 +1,5 @@
 // English Gym: funciona offline. Ao atualizar o app, mude a versão abaixo.
-const CACHE = "english-gym-v3";
+const CACHE = "english-gym-v4";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
